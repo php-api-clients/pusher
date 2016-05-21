@@ -1,6 +1,6 @@
 # Pusher API Client for PHP 7
 
-[![Linux Build Status](https://appveyor-ci.org/WyriHaximus/php-pusher-client.svg?branch=master)](https://appveyor-ci.org/WyriHaximus/php-pusher-client)
+[![Linux Build Status](https://travis-ci.org/WyriHaximus/php-pusher-client.svg?branch=master)](https://travis-ci.org/WyriHaximus/php-pusher-client)
 [![Latest Stable Version](https://poser.pugx.org/WyriHaximus/pusher-client/v/stable.png)](https://packagist.org/packages/WyriHaximus/pusher-client)
 [![Total Downloads](https://poser.pugx.org/WyriHaximus/pusher-client/downloads.png)](https://packagist.org/packages/WyriHaximus/pusher-client)
 [![Code Coverage](https://scrutinizer-ci.com/g/WyriHaximus/php-pusher-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WyriHaximus/php-pusher-client/?branch=master)
