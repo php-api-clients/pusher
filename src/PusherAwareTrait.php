@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace WyriHaximus\Pusher;
 
-trait TransportAwareTrait
+trait PusherAwareTrait
 {
     private $pusher;
 
