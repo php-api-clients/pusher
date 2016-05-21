@@ -35,14 +35,17 @@ class AsyncClient
 
         $this->app = $app;
 
-        $this->url = 'wss://ws.pusherapp.com:443/app/' . $this->app . '?client=wyrihaximus-php-pusher-client&version=0.0.1&protocol=7';
+        $this->url = 'wss://ws.pusherapp.com:443/app/' .
+            $this->app .
+            '?client=wyrihaximus-php-pusher-client&version=0.0.1&protocol=7'
+        ;
         $connector = new Connector($loop);
         $this->socket = $connector($this->url);
         $this->connection = Promise::toObservable($this->socket)
             ->flatMap(function (WebSocket $socket) {
                 $this->socket = resolve($socket);
                 return Observable::create(function (ObserverInterface $observer) use ($socket) {
-                    $socket->on('message', function(MessageInterface $message) use ($observer) {
+                    $socket->on('message', function (MessageInterface $message) use ($observer) {
                         $observer->onNext($message);
                     });
                     $socket->on('close', function ($code, $reason) {
