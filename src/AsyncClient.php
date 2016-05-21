@@ -60,19 +60,24 @@ class AsyncClient
     public function subscribe(string $channel): ObservableInterface
     {
         $this->channels[$channel] = $channel;
-        $this->socket->then(function (WebSocket $socket) use ($channel) {
-            $socket->send(json_encode([
-                'event' => 'pusher:subscribe',
-                'data' => [
-                    'channel' => $channel,
-                ]
-            ]));
-        });
+        $this->send([
+            'event' => 'pusher:subscribe',
+            'data' => [
+                'channel' => $channel,
+            ],
+        ]);
 
         return $this->connection->filter(function (array $event) use ($channel) {
             return isset($event['channel']) && $event['channel'] == $channel;
         })->filter(function (array $event) use ($channel) {
             return $event['event'] !== 'pusher_internal:subscription_succeeded';
+        });
+    }
+
+    public function send(array $message)
+    {
+        $this->socket->then(function (WebSocket $socket) use ($message) {
+            $socket->send(json_encode($message));
         });
     }
 }
