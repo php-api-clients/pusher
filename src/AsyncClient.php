@@ -53,7 +53,6 @@ class AsyncClient
                 ), new EventLoopScheduler(getLoop()));
             }));
         }, new EventLoopScheduler($loop))->map(function ($message) {
-            var_export($message);
             return json_decode((string)$message, true);
         });
     }
