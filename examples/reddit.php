@@ -16,7 +16,7 @@ $display = function ($event) {
 $loop = Factory::create();
 
 /**
- * The App ID isn't a secret and comes from a Pusher blog post: 
+ * The App ID isn't a secret and comes from a Pusher blog post:
  * @link https://blog.pusher.com/pusher-realtime-reddit-api/
  */
 $client = new AsyncClient($loop, '50ed18dd967b455393ed');
