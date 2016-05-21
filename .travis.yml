@@ -1,0 +1,43 @@
+language: php
+sudo: false
+
+## Cache composer bits
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+## PHP versions we test against
+php:
+  - 7.0
+  - hhvm
+
+## Build matrix for lowest and highest possible targets
+matrix:
+  include:
+    - php: 7.0
+      env: dependencies=lowest
+    - php: hhvm
+      env: dependencies=lowest
+    - php: 7.0
+      env: dependencies=highest
+    - php: hhvm
+      env: dependencies=highest
+  allow_failures:
+    - php: hhvm
+
+## Update composer and configure authentication token
+before_install:
+  - composer self-update
+
+## Install or update dependencies
+install:
+  - if [ -z "$dependencies" ]; then composer install --prefer-dist; fi;
+  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-dist -n; fi;
+  - if [ "$dependencies" = "highest" ]; then composer update --prefer-dist -n; fi;
+  - composer show -i
+
+## Run the actual test
+script: make travis
+
+## Gather coverage and set it to coverage servers
+after_script: make travis-coverage

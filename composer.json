@@ -1,0 +1,32 @@
+{
+  "name": "wyrihaximus/pusher-client",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Cees-Jan Kiewiet",
+      "email": "ceesjank@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.0",
+    "ratchet/pawl": "^0.2.2",
+    "wyrihaximus/api-client": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.2.3",
+    "squizlabs/php_codesniffer": "^2.6",
+    "vectorface/dunit": "~2.0",
+    "phake/phake": "^2.3",
+    "wyrihaximus/api-client-resource-generator": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "WyriHaximus\\Pusher\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "WyriHaximus\\Tests\\Pusher\\": "tests/"
+    }
+  }
+}
