@@ -12,7 +12,7 @@ trait PusherAwareTrait
         $this->pusher = $pusher;
     }
 
-    protected function getTransport(): AsyncClient
+    protected function getPusher(): AsyncClient
     {
         return $this->pusher;
     }
