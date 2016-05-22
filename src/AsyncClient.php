@@ -56,6 +56,10 @@ class AsyncClient
 
     public function channel(string $channel): ObservableInterface
     {
+        if (isset($this->channels[$channel])) {
+            return $this->channels[$channel];
+        }
+
         $channelMessages = $this->messages->filter(function ($event) use ($channel) {
             return isset($event->channel) && $event->channel == $channel;
         });
@@ -82,7 +86,8 @@ class AsyncClient
             });
         });
 
-        return $events->share();
+        $this->channels[$channel] = $events->share();
+        return $this->channels[$channel];
     }
 
     public function send(array $message)
