@@ -26,7 +26,7 @@ class AsyncClient
     protected $app;
     protected $url;
     protected $client;
-    protected $message;
+    protected $messages;
     protected $channels = [];
 
     public function __construct(LoopInterface $loop, string $app, Transport $transport = null)
