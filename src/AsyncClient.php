@@ -45,7 +45,8 @@ class AsyncClient
             $this->app .
             '?client=wyrihaximus-php-pusher-client&version=0.0.1&protocol=7'
         ;
-        $this->client   = (new Client($this->url))->shareReplay(1); //Only create one connection and share the most recent among all subscriber
+        //Only create one connection and share the most recent among all subscriber
+        $this->client   = (new Client($this->url))->shareReplay(1);
         $this->messages = $this->client
             ->flatMap(function (MessageSubject $ms) {
                 return $ms;
@@ -59,7 +60,13 @@ class AsyncClient
             return isset($event->channel) && $event->channel == $channel;
         });
 
-        $events = Observable::create(function (ObserverInterface $observer, SchedulerInterface $scheduler) use ($channel, $channelMessages) {
+        $events = Observable::create(function (
+            ObserverInterface $observer,
+            SchedulerInterface $scheduler
+        ) use (
+            $channel,
+            $channelMessages
+        ) {
 
             $subscription = $channelMessages
                 ->filter(function ($msg) {
