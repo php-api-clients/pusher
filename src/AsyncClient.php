@@ -71,7 +71,6 @@ class AsyncClient
             $channel,
             $channelMessages
         ) {
-
             $subscription = $channelMessages
                 ->filter(function ($msg) {
                     return $msg->event !== 'pusher_internal:subscription_succeeded';
