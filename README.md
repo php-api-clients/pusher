@@ -1,11 +1,11 @@
 # Pusher API Client for PHP 7
 
-[![Linux Build Status](https://travis-ci.org/WyriHaximus/php-pusher-client.svg?branch=master)](https://travis-ci.org/WyriHaximus/php-pusher-client)
-[![Latest Stable Version](https://poser.pugx.org/WyriHaximus/pusher-client/v/stable.png)](https://packagist.org/packages/WyriHaximus/pusher-client)
-[![Total Downloads](https://poser.pugx.org/WyriHaximus/pusher-client/downloads.png)](https://packagist.org/packages/WyriHaximus/pusher-client)
-[![Code Coverage](https://scrutinizer-ci.com/g/WyriHaximus/php-pusher-client/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WyriHaximus/php-pusher-client/?branch=master)
-[![License](https://poser.pugx.org/WyriHaximus/pusher-client/license.png)](https://packagist.org/packages/wyrihaximus/pusher-client)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/WyriHaximus/php-pusher-client/badge.svg)](https://appveyor-ci.org/WyriHaximus/php-pusher-client)
+[![Linux Build Status](https://travis-ci.org/php-api-clients/pusher.svg?branch=master)](https://travis-ci.org/php-api-clients/pusher)
+[![Latest Stable Version](https://poser.pugx.org/api-clients/pusher/v/stable.png)](https://packagist.org/packages/api-clients/pusher)
+[![Total Downloads](https://poser.pugx.org/api-clients/pusher/downloads.png)](https://packagist.org/packages/api-clients/pusher)
+[![Code Coverage](https://scrutinizer-ci.com/g/php-api-clients/pusher/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/php-api-clients/pusher/?branch=master)
+[![License](https://poser.pugx.org/api-clients/pusher/license.png)](https://packagist.org/packages/api-clients/pusher)
+[![PHP 7 ready](http://php7ready.timesplinter.ch/php-api-clients/pusher/badge.svg)](https://appveyor-ci.org/php-api-clients/pusher)
 
 
 # Goals
