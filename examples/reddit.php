@@ -1,9 +1,8 @@
 <?php
 
 use React\EventLoop\Factory;
-use function Ratchet\Client\connect;
 use Rx\Observer\CallbackObserver;
-use WyriHaximus\Pusher\AsyncClient;
+use ApiClients\Pusher\AsyncClient;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 

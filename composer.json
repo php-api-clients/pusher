@@ -21,12 +21,12 @@
   },
   "autoload": {
     "psr-4": {
-      "WyriHaximus\\Pusher\\": "src/"
+      "ApiClients\\Pusher\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "WyriHaximus\\Tests\\Pusher\\": "tests/"
+      "ApiClients\\Tests\\Pusher\\": "tests/"
     }
   }
 }

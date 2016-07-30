@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace WyriHaximus\Pusher;
+namespace ApiClients\Pusher;
 
 use React\EventLoop\LoopInterface;
 use Rx\Disposable\CallbackDisposable;
