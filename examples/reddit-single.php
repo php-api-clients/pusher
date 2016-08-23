@@ -10,9 +10,7 @@ require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
  */
 $client = new Client(require 'reddit.key.php');
 
-$subReddits = $argv;
-array_shift($subReddits);
-$client->channels($subReddits, function ($event) {
+$client->channel((string) $argv[1], function ($event) {
     echo 'Channel: ', $event->channel, PHP_EOL;
     echo 'Event: ', $event->event, PHP_EOL;
     echo 'Data: ', $event->data, PHP_EOL;

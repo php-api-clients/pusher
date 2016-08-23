@@ -1,6 +1,8 @@
 {
   "name": "api-clients/pusher",
   "license": "MIT",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "authors": [
     {
       "name": "Cees-Jan Kiewiet",
@@ -15,7 +17,6 @@
   "require-dev": {
     "phpunit/phpunit": "^5.2.3",
     "squizlabs/php_codesniffer": "^2.6",
-    "vectorface/dunit": "~2.0",
     "phake/phake": "^2.3",
     "api-clients/resource-generator": "dev-master"
   },

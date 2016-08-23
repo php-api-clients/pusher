@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace ApiClients\Pusher;
 
@@ -7,15 +6,10 @@ use React\EventLoop\LoopInterface;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
 use Rx\ObservableInterface;
-use Rx\Observer\CallbackObserver;
 use Rx\ObserverInterface;
-use Rx\React\Promise;
-use Rx\Scheduler\EventLoopScheduler;
 use Rx\SchedulerInterface;
-use Rx\Websocket\Client;
+use Rx\Websocket\Client as WebsocketClient;
 use Rx\Websocket\MessageSubject;
-use WyriHaximus\ApiClient\Transport\Client as Transport;
-use WyriHaximus\ApiClient\Transport\Factory;
 use function React\Promise\resolve;
 use function EventLoop\getLoop;
 use function EventLoop\setLoop;
@@ -29,24 +23,16 @@ class AsyncClient
     protected $messages;
     protected $channels = [];
 
-    public function __construct(LoopInterface $loop, string $app, Transport $transport = null)
+    public function __construct(LoopInterface $loop, string $app)
     {
         setLoop($loop);
-        /*if (!($transport instanceof Transport)) {
-            $transport = Factory::create($loop, [
-                    'resource_namespace' => 'Async',
-                ] + ApiSettings::TRANSPORT_OPTIONS);
-        }
-        $this->transport = $transport;*/
-
         $this->app = $app;
-
         $this->url = 'wss://ws.pusherapp.com/app/' .
             $this->app .
             '?client=wyrihaximus-php-pusher-client&version=0.0.1&protocol=7'
         ;
         //Only create one connection and share the most recent among all subscriber
-        $this->client   = (new Client($this->url))->shareReplay(1);
+        $this->client   = (new WebsocketClient($this->url))->shareReplay(1);
         $this->messages = $this->client
             ->flatMap(function (MessageSubject $ms) {
                 return $ms;
