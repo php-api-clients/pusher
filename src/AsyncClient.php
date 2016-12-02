@@ -14,25 +14,34 @@ use function React\Promise\resolve;
 use function EventLoop\getLoop;
 use function EventLoop\setLoop;
 
-class AsyncClient
+final class AsyncClient
 {
-    protected $transport;
-    protected $app;
-    protected $url;
+    /**
+     * @var Observable\RefCountObservable
+     */
     protected $client;
+
+    /**
+     * @var Observable\AnonymousObservable
+     */
     protected $messages;
+
+    /**
+     * @var array
+     */
     protected $channels = [];
 
+    /**
+     * @param LoopInterface $loop
+     * @param string $app Application ID
+     */
     public function __construct(LoopInterface $loop, string $app)
     {
+        // Set loop into global look accessor
         setLoop($loop);
-        $this->app = $app;
-        $this->url = 'wss://ws.pusherapp.com/app/' .
-            $this->app .
-            '?client=wyrihaximus-php-pusher-client&version=0.0.1&protocol=7'
-        ;
+
         //Only create one connection and share the most recent among all subscriber
-        $this->client   = (new WebsocketClient($this->url))->shareReplay(1);
+        $this->client   = (new WebsocketClient(ApiSettings::createUrl($app)))->shareReplay(1);
         $this->messages = $this->client
             ->flatMap(function (MessageSubject $ms) {
                 return $ms;
@@ -40,6 +49,12 @@ class AsyncClient
             ->map('json_decode');
     }
 
+    /**
+     * Listen on a channel
+     *
+     * @param string $channel Channel to listen on
+     * @return ObservableInterface
+     */
     public function channel(string $channel): ObservableInterface
     {
         if (isset($this->channels[$channel])) {
@@ -75,6 +90,11 @@ class AsyncClient
         return $this->channels[$channel];
     }
 
+    /**
+     * Send a message through the client
+     *
+     * @param array $message Message to send, will be json encoded
+     */
     public function send(array $message)
     {
         $this->client
