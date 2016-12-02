@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af3179fc2f71e4af4243e2e7ffe250a6",
-    "content-hash": "c57fff7390dfd71ef423603d85fd83d5",
+    "hash": "07738e1519fb75ec5686097cd123dc14",
+    "content-hash": "82f8d3ab57260dd7045d52212ea9b097",
     "packages": [
         {
             "name": "clue/block-react",
@@ -158,6 +158,53 @@
                 "uri"
             ],
             "time": "2016-06-24 23:00:38"
+        },
+        {
+            "name": "ocramius/package-versions",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ocramius/PackageVersions.git",
+                "reference": "4b2bfc8128db95b533303942b0d5b332bffa07c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/4b2bfc8128db95b533303942b0d5b332bffa07c6",
+                "reference": "4b2bfc8128db95b533303942b0d5b332bffa07c6",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": "~7.0"
+            },
+            "require-dev": {
+                "composer/composer": "^1.2.0",
+                "phpunit/phpunit": "^5.4.7"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "PackageVersions\\Installer",
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageVersions\\": "src/PackageVersions"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com"
+                }
+            ],
+            "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
+            "time": "2016-07-25 07:13:56"
         },
         {
             "name": "psr/http-message",
@@ -363,16 +410,16 @@
         },
         {
             "name": "react/http-client",
-            "version": "v0.4.14",
+            "version": "v0.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http-client.git",
-                "reference": "24104ddd30a2a76d0697c05950ba2ae43b51de3f"
+                "reference": "01e919008363622334f91419a9908b3a51754ccd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http-client/zipball/24104ddd30a2a76d0697c05950ba2ae43b51de3f",
-                "reference": "24104ddd30a2a76d0697c05950ba2ae43b51de3f",
+                "url": "https://api.github.com/repos/reactphp/http-client/zipball/01e919008363622334f91419a9908b3a51754ccd",
+                "reference": "01e919008363622334f91419a9908b3a51754ccd",
                 "shasum": ""
             },
             "require": {
@@ -399,7 +446,7 @@
             "keywords": [
                 "http"
             ],
-            "time": "2016-10-28 18:03:41"
+            "time": "2016-12-02 10:17:42"
         },
         {
             "name": "react/promise",
@@ -1725,16 +1772,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.7.0",
+            "version": "5.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "00d72b8dbd2bb7d6f02a820e6db5cb70df6ac55c"
+                "reference": "0158307fae98f8013eeac2ff2803fe8d4f6bc1a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/00d72b8dbd2bb7d6f02a820e6db5cb70df6ac55c",
-                "reference": "00d72b8dbd2bb7d6f02a820e6db5cb70df6ac55c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0158307fae98f8013eeac2ff2803fe8d4f6bc1a0",
+                "reference": "0158307fae98f8013eeac2ff2803fe8d4f6bc1a0",
                 "shasum": ""
             },
             "require": {
@@ -1803,7 +1850,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-01 17:04:00"
+            "time": "2016-12-02 12:03:05"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

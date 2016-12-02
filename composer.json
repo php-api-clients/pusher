@@ -1,5 +1,6 @@
 {
   "name": "api-clients/pusher",
+  "homepage": "https://php-api-clients.org/clients/pusher",
   "license": "MIT",
   "minimum-stability": "dev",
   "prefer-stable": true,
@@ -12,6 +13,7 @@
   "require": {
     "php": "^7.0",
     "clue/block-react": "^1.1",
+    "ocramius/package-versions": "^1.1",
     "rx/websocket": "^0.9.2"
   },
   "require-dev": {
