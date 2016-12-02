@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace ApiClients\Tests\Pusher;
 
-class AsyncClientTest extends \PHPUnit_Framework_TestCase
+use ApiClients\Tools\TestUtilities\TestCase;
+
+class AsyncClientTest extends TestCase
 {
     public function testTrue()
     {
