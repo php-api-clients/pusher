@@ -15,6 +15,11 @@ class ApiSettingsTest extends TestCase
         ];
 
         yield [
+            'dev@xyz',
+            '0.0.1-xyz',
+        ];
+
+        yield [
             '1.0.0@abcdefghijklopqrstuwxyz',
             '1.0.0',
         ];

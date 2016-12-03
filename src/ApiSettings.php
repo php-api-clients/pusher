@@ -20,7 +20,7 @@ final class ApiSettings
 
         list($version, $hash) = explode('@', $version);
 
-        if (substr($version, -4) === '-dev') {
+        if (strpos($version, 'dev') !== false) {
             return '0.0.1-' . $hash;
         }
 
