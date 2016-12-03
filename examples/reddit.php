@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use ApiClients\Pusher\Client;
+use ApiClients\Client\Pusher\Client;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 

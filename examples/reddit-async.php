@@ -2,7 +2,7 @@
 
 use React\EventLoop\Factory;
 use Rx\Observer\CallbackObserver;
-use ApiClients\Pusher\AsyncClient;
+use ApiClients\Client\Pusher\AsyncClient;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 
