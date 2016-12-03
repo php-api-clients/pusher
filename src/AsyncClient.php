@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace ApiClients\Pusher;
+namespace ApiClients\Client\Pusher;
 
 use React\EventLoop\LoopInterface;
 use Rx\Disposable\CallbackDisposable;

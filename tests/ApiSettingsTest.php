@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace ApiClients\Tests\Pusher;
 
-use ApiClients\Pusher\ApiSettings;
+use ApiClients\Client\Pusher\ApiSettings;
 use ApiClients\Tools\TestUtilities\TestCase;
 
 class ApiSettingsTest extends TestCase
