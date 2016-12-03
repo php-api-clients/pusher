@@ -37,7 +37,7 @@
     "api-clients": {
       "command-bus": {
         "path": "src/CommandBus",
-        "namespace": "ApiClients\\Pusher\\CommandBus"
+        "namespace": "ApiClients\\Client\\Pusher\\CommandBus"
       }
     }
   }
