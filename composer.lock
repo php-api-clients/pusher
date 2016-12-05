@@ -4,21 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c553e56739c6f08f637ecfb4285166fb",
-    "content-hash": "c4ae86f7e797671dd23867a356a28bc9",
+    "content-hash": "41a369e552c92ca3d2c8e897a96f8ab8",
     "packages": [
         {
             "name": "api-clients/command-bus",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-api-clients/command-bus.git",
-                "reference": "0263845d3c8411ff4230d11a29cda3cc5cf8defe"
+                "reference": "e9be8413b956aad66c3c8063c34ac2d3490e5af0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-api-clients/command-bus/zipball/0263845d3c8411ff4230d11a29cda3cc5cf8defe",
-                "reference": "0263845d3c8411ff4230d11a29cda3cc5cf8defe",
+                "url": "https://api.github.com/repos/php-api-clients/command-bus/zipball/e9be8413b956aad66c3c8063c34ac2d3490e5af0",
+                "reference": "e9be8413b956aad66c3c8063c34ac2d3490e5af0",
                 "shasum": ""
             },
             "require": {
@@ -33,12 +32,8 @@
                 "wyrihaximus/ticking-promise": "^1.6"
             },
             "require-dev": {
-                "api-clients/test-utilities": "dev-master",
-                "clue/block-react": "^1.1",
-                "phake/phake": "^2.3",
-                "php-di/php-di": "^5.4",
-                "phpunit/phpunit": "^5.2.3",
-                "squizlabs/php_codesniffer": "^2.6"
+                "api-clients/test-utilities": "^1.0",
+                "php-di/php-di": "^5.4"
             },
             "type": "library",
             "autoload": {
@@ -56,7 +51,8 @@
                     "email": "ceesjank@gmail.com"
                 }
             ],
-            "time": "2016-11-13 18:43:01"
+            "description": "Light weight wrapper around league/tactician adding promised based interface(s) and next tick execution",
+            "time": "2016-12-04T22:58:41+00:00"
         },
         {
             "name": "clue/block-react",
@@ -104,7 +100,7 @@
                 "reactphp",
                 "synchronous"
             ],
-            "time": "2016-03-09 15:10:22"
+            "time": "2016-03-09T15:10:22+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -131,7 +127,7 @@
                 "MIT"
             ],
             "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-            "time": "2014-12-30 15:22:37"
+            "time": "2014-12-30T15:22:37+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -199,7 +195,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2016-10-24 11:45:47"
+            "time": "2016-10-24T11:45:47+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -253,7 +249,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09 13:34:57"
+            "time": "2014-09-09T13:34:57+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -299,7 +295,7 @@
                 "event-dispatcher",
                 "event-emitter"
             ],
-            "time": "2012-11-02 14:49:47"
+            "time": "2012-11-02T14:49:47+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -357,7 +353,7 @@
                 "stream",
                 "uri"
             ],
-            "time": "2016-06-24 23:00:38"
+            "time": "2016-06-24T23:00:38+00:00"
         },
         {
             "name": "igorw/get-in",
@@ -402,7 +398,7 @@
                 "assoc-array",
                 "hash-map"
             ],
-            "time": "2014-12-15 23:03:51"
+            "time": "2014-12-15T23:03:51+00:00"
         },
         {
             "name": "joshdifabio/composed",
@@ -451,7 +447,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2015-07-16 22:30:20"
+            "time": "2015-07-16T22:30:20+00:00"
         },
         {
             "name": "league/tactician",
@@ -502,7 +498,7 @@
                 "command bus",
                 "service layer"
             ],
-            "time": "2016-02-20 11:14:36"
+            "time": "2016-02-20T11:14:36+00:00"
         },
         {
             "name": "league/tactician-container",
@@ -553,7 +549,7 @@
                 "league",
                 "tactician"
             ],
-            "time": "2015-12-31 12:41:26"
+            "time": "2015-12-31T12:41:26+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -600,7 +596,7 @@
                 }
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2016-07-25 07:13:56"
+            "time": "2016-07-25T07:13:56+00:00"
         },
         {
             "name": "psr/http-message",
@@ -650,7 +646,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06 14:39:51"
+            "time": "2016-08-06T14:39:51+00:00"
         },
         {
             "name": "react/cache",
@@ -684,7 +680,7 @@
             "keywords": [
                 "cache"
             ],
-            "time": "2016-02-25 18:17:16"
+            "time": "2016-02-25T18:17:16+00:00"
         },
         {
             "name": "react/dns",
@@ -721,7 +717,7 @@
                 "dns",
                 "dns-resolver"
             ],
-            "time": "2016-08-01 10:09:07"
+            "time": "2016-08-01T10:09:07+00:00"
         },
         {
             "name": "react/event-loop",
@@ -765,7 +761,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2016-03-08 02:09:32"
+            "time": "2016-03-08T02:09:32+00:00"
         },
         {
             "name": "react/http",
@@ -802,7 +798,7 @@
             "keywords": [
                 "http"
             ],
-            "time": "2016-11-09 15:20:39"
+            "time": "2016-11-09T15:20:39+00:00"
         },
         {
             "name": "react/http-client",
@@ -842,7 +838,7 @@
             "keywords": [
                 "http"
             ],
-            "time": "2016-12-02 10:17:42"
+            "time": "2016-12-02T10:17:42+00:00"
         },
         {
             "name": "react/promise",
@@ -886,7 +882,7 @@
                 }
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
-            "time": "2016-05-03 17:50:52"
+            "time": "2016-05-03T17:50:52+00:00"
         },
         {
             "name": "react/promise-timer",
@@ -936,7 +932,7 @@
                 "timeout",
                 "timer"
             ],
-            "time": "2016-02-29 19:03:45"
+            "time": "2016-02-29T19:03:45+00:00"
         },
         {
             "name": "react/socket",
@@ -977,7 +973,7 @@
             "keywords": [
                 "Socket"
             ],
-            "time": "2016-03-01 20:10:35"
+            "time": "2016-03-01T20:10:35+00:00"
         },
         {
             "name": "react/socket-client",
@@ -1018,7 +1014,7 @@
             "keywords": [
                 "Socket"
             ],
-            "time": "2016-11-20 00:11:24"
+            "time": "2016-11-20T00:11:24+00:00"
         },
         {
             "name": "react/stream",
@@ -1062,7 +1058,7 @@
                 "pipe",
                 "stream"
             ],
-            "time": "2016-11-13 17:06:02"
+            "time": "2016-11-13T17:06:02+00:00"
         },
         {
             "name": "reactivex/rxphp",
@@ -1125,7 +1121,7 @@
                 "reactive",
                 "rx"
             ],
-            "time": "2016-08-23 17:17:58"
+            "time": "2016-08-23T17:17:58+00:00"
         },
         {
             "name": "rx/websocket",
@@ -1181,7 +1177,7 @@
                 "rxphp",
                 "websocket"
             ],
-            "time": "2016-02-09 03:27:41"
+            "time": "2016-02-09T03:27:41+00:00"
         },
         {
             "name": "voryx/event-loop",
@@ -1233,7 +1229,7 @@
                 "static",
                 "timer"
             ],
-            "time": "2015-11-23 22:10:36"
+            "time": "2015-11-23T22:10:36+00:00"
         },
         {
             "name": "wyrihaximus/tactician-command-handler-mapper",
@@ -1278,7 +1274,7 @@
                 }
             ],
             "description": "Command to Handler mapper for Tactician",
-            "time": "2016-09-06 09:52:48"
+            "time": "2016-09-06T09:52:48+00:00"
         },
         {
             "name": "wyrihaximus/ticking-promise",
@@ -1324,27 +1320,29 @@
                 }
             ],
             "description": "Wrapping ticks into a promise",
-            "time": "2016-03-05 20:23:05"
+            "time": "2016-03-05T20:23:05+00:00"
         }
     ],
     "packages-dev": [
         {
             "name": "api-clients/test-utilities",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-api-clients/test-utilities.git",
-                "reference": "99062f51b9bbc4a7e4980bb31c225c1277b2e491"
+                "reference": "26e92e4c1bb132cd78d247fa210f2bb2308488f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-api-clients/test-utilities/zipball/99062f51b9bbc4a7e4980bb31c225c1277b2e491",
-                "reference": "99062f51b9bbc4a7e4980bb31c225c1277b2e491",
+                "url": "https://api.github.com/repos/php-api-clients/test-utilities/zipball/26e92e4c1bb132cd78d247fa210f2bb2308488f8",
+                "reference": "26e92e4c1bb132cd78d247fa210f2bb2308488f8",
                 "shasum": ""
             },
             "require": {
                 "clue/block-react": "^1.1",
                 "humbug/humbug": "1.0.0-alpha2",
+                "jakub-onderka/php-console-highlighter": "^0.3.2",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
                 "phake/phake": "^2.3",
                 "php": "^7.0",
                 "phpspec/prophecy": "^1.6",
@@ -1367,7 +1365,7 @@
                     "email": "ceesjank@gmail.com"
                 }
             ],
-            "time": "2016-11-26 22:01:56"
+            "time": "2016-12-04T22:25:39+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -1421,7 +1419,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14 21:17:01"
+            "time": "2015-06-14T21:17:01+00:00"
         },
         {
             "name": "humbug/humbug",
@@ -1488,7 +1486,141 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2016-08-01 10:27:00"
+            "time": "2016-08-01T10:27:00+00:00"
+        },
+        {
+            "name": "jakub-onderka/php-console-color",
+            "version": "0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Console-Color.git",
+                "reference": "e0b393dacf7703fc36a4efc3df1435485197e6c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Console-Color/zipball/e0b393dacf7703fc36a4efc3df1435485197e6c1",
+                "reference": "e0b393dacf7703fc36a4efc3df1435485197e6c1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "jakub-onderka/php-code-style": "1.0",
+                "jakub-onderka/php-parallel-lint": "0.*",
+                "jakub-onderka/php-var-dump-check": "0.*",
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JakubOnderka\\PhpConsoleColor": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "jakub.onderka@gmail.com",
+                    "homepage": "http://www.acci.cz"
+                }
+            ],
+            "time": "2014-04-08T15:00:19+00:00"
+        },
+        {
+            "name": "jakub-onderka/php-console-highlighter",
+            "version": "v0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Console-Highlighter.git",
+                "reference": "7daa75df45242c8d5b75a22c00a201e7954e4fb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Console-Highlighter/zipball/7daa75df45242c8d5b75a22c00a201e7954e4fb5",
+                "reference": "7daa75df45242c8d5b75a22c00a201e7954e4fb5",
+                "shasum": ""
+            },
+            "require": {
+                "jakub-onderka/php-console-color": "~0.1",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "jakub-onderka/php-code-style": "~1.0",
+                "jakub-onderka/php-parallel-lint": "~0.5",
+                "jakub-onderka/php-var-dump-check": "~0.1",
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~1.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JakubOnderka\\PhpConsoleHighlighter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "acci@acci.cz",
+                    "homepage": "http://www.acci.cz/"
+                }
+            ],
+            "time": "2015-04-20T18:58:01+00:00"
+        },
+        {
+            "name": "jakub-onderka/php-parallel-lint",
+            "version": "v0.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JakubOnderka/PHP-Parallel-Lint.git",
+                "reference": "2ead2e4043ab125bee9554f356e0a86742c2d4fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JakubOnderka/PHP-Parallel-Lint/zipball/2ead2e4043ab125bee9554f356e0a86742c2d4fa",
+                "reference": "2ead2e4043ab125bee9554f356e0a86742c2d4fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "jakub-onderka/php-console-highlighter": "~0.3",
+                "nette/tester": "~1.3"
+            },
+            "suggest": {
+                "jakub-onderka/php-console-highlighter": "Highlight syntax in code snippet"
+            },
+            "bin": [
+                "parallel-lint"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "./"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jakub Onderka",
+                    "email": "jakub.onderka@gmail.com"
+                }
+            ],
+            "description": "This tool check syntax of PHP files about 20x faster than serial check.",
+            "homepage": "https://github.com/JakubOnderka/PHP-Parallel-Lint",
+            "time": "2015-12-15T10:42:16+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -1530,7 +1662,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2016-10-31 17:19:45"
+            "time": "2016-10-31T17:19:45+00:00"
         },
         {
             "name": "padraic/humbug_get_contents",
@@ -1587,7 +1719,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2015-04-22 18:45:00"
+            "time": "2015-04-22T18:45:00+00:00"
         },
         {
             "name": "padraic/phar-updater",
@@ -1639,7 +1771,7 @@
                 "self-update",
                 "update"
             ],
-            "time": "2016-01-05 23:08:01"
+            "time": "2016-01-05T23:08:01+00:00"
         },
         {
             "name": "padraic/phpunit-accelerator",
@@ -1693,7 +1825,7 @@
                 "phpunit",
                 "property"
             ],
-            "time": "2015-01-15 21:18:21"
+            "time": "2015-01-15T21:18:21+00:00"
         },
         {
             "name": "padraic/phpunit-extensions",
@@ -1744,7 +1876,7 @@
                 "testing",
                 "tests"
             ],
-            "time": "2016-01-06 12:16:20"
+            "time": "2016-01-06T12:16:20+00:00"
         },
         {
             "name": "phake/phake",
@@ -1802,7 +1934,7 @@
                 "mock",
                 "testing"
             ],
-            "time": "2016-03-04 18:49:33"
+            "time": "2016-03-04T18:49:33+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -1856,7 +1988,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27 11:43:31"
+            "time": "2015-12-27T11:43:31+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -1901,7 +2033,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2016-09-30 07:12:33"
+            "time": "2016-09-30T07:12:33+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -1948,7 +2080,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2016-11-25 06:54:22"
+            "time": "2016-11-25T06:54:22+00:00"
         },
         {
             "name": "phpspec/prophecy",
@@ -2011,7 +2143,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-11-21 14:58:47"
+            "time": "2016-11-21T14:58:47+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2074,7 +2206,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-11-28 16:00:31"
+            "time": "2016-11-28T16:00:31+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2121,7 +2253,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2016-10-03 07:40:28"
+            "time": "2016-10-03T07:40:28+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -2162,7 +2294,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -2206,7 +2338,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12 18:03:57"
+            "time": "2016-05-12T18:03:57+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -2255,7 +2387,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2016-11-15 14:06:22"
+            "time": "2016-11-15T14:06:22+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -2337,7 +2469,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-03 08:33:00"
+            "time": "2016-12-03T08:33:00+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2396,7 +2528,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-11-27 07:52:03"
+            "time": "2016-11-27T07:52:03+00:00"
         },
         {
             "name": "psr/log",
@@ -2443,7 +2575,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-10-10 12:19:37"
+            "time": "2016-10-10T12:19:37+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -2488,7 +2620,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2016-02-13 06:45:14"
+            "time": "2016-02-13T06:45:14+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -2552,7 +2684,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2016-11-19 09:18:40"
+            "time": "2016-11-19T09:18:40+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -2604,7 +2736,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2015-12-08 07:14:41"
+            "time": "2015-12-08T07:14:41+00:00"
         },
         {
             "name": "sebastian/environment",
@@ -2654,7 +2786,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2016-11-26 07:53:53"
+            "time": "2016-11-26T07:53:53+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -2721,7 +2853,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2016-11-19 08:54:04"
+            "time": "2016-11-19T08:54:04+00:00"
         },
         {
             "name": "sebastian/global-state",
@@ -2772,7 +2904,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2015-10-12 03:26:01"
+            "time": "2015-10-12T03:26:01+00:00"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -2818,7 +2950,7 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
-            "time": "2016-11-19 07:35:10"
+            "time": "2016-11-19T07:35:10+00:00"
         },
         {
             "name": "sebastian/recursion-context",
@@ -2871,7 +3003,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2016-11-19 07:33:16"
+            "time": "2016-11-19T07:33:16+00:00"
         },
         {
             "name": "sebastian/resource-operations",
@@ -2913,7 +3045,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2015-07-28 20:34:47"
+            "time": "2015-07-28T20:34:47+00:00"
         },
         {
             "name": "sebastian/version",
@@ -2956,7 +3088,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2016-10-03 07:35:21"
+            "time": "2016-10-03T07:35:21+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -3034,7 +3166,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-11-30 04:02:31"
+            "time": "2016-11-30T04:02:31+00:00"
         },
         {
             "name": "symfony/console",
@@ -3097,7 +3229,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-16 22:18:16"
+            "time": "2016-11-16T22:18:16+00:00"
         },
         {
             "name": "symfony/debug",
@@ -3154,7 +3286,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-16 22:18:16"
+            "time": "2016-11-16T22:18:16+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -3214,7 +3346,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-10-13 06:29:04"
+            "time": "2016-10-13T06:29:04+00:00"
         },
         {
             "name": "symfony/finder",
@@ -3263,7 +3395,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-03 08:11:03"
+            "time": "2016-11-03T08:11:03+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -3322,7 +3454,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14 01:06:16"
+            "time": "2016-11-14T01:06:16+00:00"
         },
         {
             "name": "symfony/process",
@@ -3371,7 +3503,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-24 10:40:28"
+            "time": "2016-11-24T10:40:28+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -3426,7 +3558,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-11-18 21:17:59"
+            "time": "2016-11-18T21:17:59+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -3476,15 +3608,12 @@
                 "check",
                 "validate"
             ],
-            "time": "2016-11-23 20:04:58"
+            "time": "2016-11-23T20:04:58+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "api-clients/command-bus": 20,
-        "api-clients/test-utilities": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
