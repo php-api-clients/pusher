@@ -10,6 +10,6 @@ final class SharedAppClientCommandTest extends TestCase
     public function testGetApp()
     {
         $appId = uniqid('app-id-', true);
-        $this->assertSame($appId, (new SharedAppClientCommand($appId))->getAppId());
+        self::assertSame($appId, (new SharedAppClientCommand($appId))->getAppId());
     }
 }

@@ -30,18 +30,18 @@ final class ApiSettingsTest extends TestCase
      */
     public function testGetVersion(string $input, string $output)
     {
-        $this->assertSame($output, ApiSettings::getVersion($input));
+        self::assertSame($output, ApiSettings::getVersion($input));
     }
 
     public function testGetVersionDefault()
     {
-        $this->assertTrue(strlen(ApiSettings::getVersion()) > 0);
+        self::assertTrue(strlen(ApiSettings::getVersion()) > 0);
     }
 
     public function testCreateUrl()
     {
         $expectedUrl = 'wss://ws.pusherapp.com/app/barBaz?client=api-clients%2Fpusher+%28https%3A%2F%2Fphp-api-clients.org%2Fclients%2Fpusher%29&protocol=7&version=' . ApiSettings::getVersion();
 
-        $this->assertSame($expectedUrl, ApiSettings::createUrl('barBaz'));
+        self::assertSame($expectedUrl, ApiSettings::createUrl('barBaz'));
     }
 }

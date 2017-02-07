@@ -9,6 +9,6 @@ final class AsyncClientTest extends TestCase
 {
     public function testTrue()
     {
-        $this->assertTrue(true);
+        self::assertTrue(true);
     }
 }
