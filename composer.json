@@ -14,6 +14,7 @@
     "api-clients/service": "dev-master",
     "clue/block-react": "^1.1",
     "ocramius/package-versions": "^1.1",
+    "reactivex/rxphp": "^1.5",
     "rx/websocket": "^0.9.2"
   },
   "require-dev": {
