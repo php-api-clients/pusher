@@ -2,9 +2,8 @@
 
 namespace ApiClients\Client\Pusher\CommandBus\Handler;
 
-use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Client\Pusher\CommandBus\Command\SharedAppClientCommand;
-use React\EventLoop\LoopInterface;
+use ApiClients\Client\Pusher\Service\SharedAppClientService;
 use React\Promise\PromiseInterface;
 use function React\Promise\resolve;
 use function WyriHaximus\React\futureFunctionPromise;
@@ -12,22 +11,17 @@ use function WyriHaximus\React\futureFunctionPromise;
 final class SharedAppClientHandler
 {
     /**
-     * @var LoopInterface
+     * @var SharedAppClientService
      */
-    private $loop;
-
-    /**
-     * @var array
-     */
-    private $apps = [];
+    private $service;
 
     /**
      * SharedAppClientHandler constructor.
-     * @param LoopInterface $loop
+     * @param SharedAppClientService $service
      */
-    public function __construct(LoopInterface $loop)
+    public function __construct(SharedAppClientService $service)
     {
-        $this->loop = $loop;
+        $this->service = $service;
     }
 
     /**
@@ -36,11 +30,6 @@ final class SharedAppClientHandler
      */
     public function handle(SharedAppClientCommand $command): PromiseInterface
     {
-        if (isset($this->apps[$command->getAppId()])) {
-            return resolve($this->apps[$command->getAppId()]);
-        }
-
-        $this->apps[$command->getAppId()] = new AsyncClient($this->loop, $command->getAppId());
-        return resolve($this->apps[$command->getAppId()]);
+        return resolve($this->service->handle($command->getAppId()));
     }
 }
