@@ -5,7 +5,7 @@ namespace ApiClients\Tests\Client\Pusher\CommandBus\Command;
 use ApiClients\Client\Pusher\CommandBus\Command\SharedAppClientCommand;
 use ApiClients\Tools\TestUtilities\TestCase;
 
-class SharedAppClientCommandTest extends TestCase
+final class SharedAppClientCommandTest extends TestCase
 {
     public function testGetApp()
     {

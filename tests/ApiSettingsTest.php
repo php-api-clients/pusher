@@ -5,7 +5,7 @@ namespace ApiClients\Tests\Client\Pusher;
 use ApiClients\Client\Pusher\ApiSettings;
 use ApiClients\Tools\TestUtilities\TestCase;
 
-class ApiSettingsTest extends TestCase
+final class ApiSettingsTest extends TestCase
 {
     public function getVersionProvider()
     {

@@ -5,7 +5,7 @@ namespace ApiClients\Tests\Client\Pusher;
 
 use ApiClients\Tools\TestUtilities\TestCase;
 
-class AsyncClientTest extends TestCase
+final class AsyncClientTest extends TestCase
 {
     public function testTrue()
     {
