@@ -46,7 +46,10 @@ final class AsyncClient
             ->flatMap(function (MessageSubject $ms) {
                 return $ms;
             })
-            ->map('json_decode');
+            ->_ApiClients_jsonDecode()
+            ->map(function (array $message) {
+                return Event::createFromMessage($message);
+            });
     }
 
     /**
@@ -61,8 +64,8 @@ final class AsyncClient
             return $this->channels[$channel];
         }
 
-        $channelMessages = $this->messages->filter(function ($event) use ($channel) {
-            return isset($event->channel) && $event->channel == $channel;
+        $channelMessages = $this->messages->filter(function (Event $event) use ($channel) {
+            return $event->getChannel() !== '' && $event->getChannel() === $channel;
         });
 
         $events = Observable::create(function (
@@ -73,8 +76,8 @@ final class AsyncClient
             $channelMessages
         ) {
             $subscription = $channelMessages
-                ->filter(function ($msg) {
-                    return $msg->event !== 'pusher_internal:subscription_succeeded';
+                ->filter(function (Event $event) {
+                    return $event->getEvent() !== 'pusher_internal:subscription_succeeded';
                 })
                 ->subscribe($observer, $scheduler);
 

@@ -1,5 +1,6 @@
 <?php
 
+use ApiClients\Client\Pusher\Event;
 use React\EventLoop\Factory;
 use Rx\Observer\CallbackObserver;
 use ApiClients\Client\Pusher\AsyncClient;
@@ -17,10 +18,10 @@ $client = new AsyncClient($loop, require 'reddit.key.php');
 $subReddits = $argv;
 array_shift($subReddits);
 foreach ($subReddits as $subReddit) {
-    $client->channel($subReddit)->subscribe(new CallbackObserver(function ($event) {
-        echo 'Channel: ', $event->channel, PHP_EOL;
-        echo 'Event: ', $event->event, PHP_EOL;
-        echo 'Data: ', $event->data, PHP_EOL;
+    $client->channel($subReddit)->subscribe(new CallbackObserver(function (Event $event) {
+        echo 'Channel: ', $event->getChannel(), PHP_EOL;
+        echo 'Event: ', $event->getEvent(), PHP_EOL;
+        echo 'Data: ', json_encode($event->getData()), PHP_EOL;
     }));
 }
 

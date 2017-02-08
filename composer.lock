@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "86c55209afc44e3338c328303735fe8a",
+    "content-hash": "846cdf28cea0ffeca189211094247dd8",
     "packages": [
         {
             "name": "api-clients/command-bus",
@@ -53,6 +53,89 @@
             ],
             "description": "Light weight wrapper around league/tactician adding promised based interface(s) and next tick execution",
             "time": "2016-12-08T08:36:09+00:00"
+        },
+        {
+            "name": "api-clients/rx",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-api-clients/rx.git",
+                "reference": "a1d797606e1367a51055634eb73cba20112a99ed"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-api-clients/rx/zipball/a1d797606e1367a51055634eb73cba20112a99ed",
+                "reference": "a1d797606e1367a51055634eb73cba20112a99ed",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0",
+                "react/promise": "^2.4",
+                "reactivex/rxphp": "^1.5"
+            },
+            "require-dev": {
+                "api-clients/test-utilities": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ApiClients\\Tools\\Rx\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                }
+            ],
+            "time": "2017-01-09 14:39:21"
+        },
+        {
+            "name": "api-clients/rx-operators",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-api-clients/rx-operators.git",
+                "reference": "d58e1744c5a4540a1d2ec69f08d4ea5627eb1cf6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-api-clients/rx-operators/zipball/d58e1744c5a4540a1d2ec69f08d4ea5627eb1cf6",
+                "reference": "d58e1744c5a4540a1d2ec69f08d4ea5627eb1cf6",
+                "shasum": ""
+            },
+            "require": {
+                "api-clients/rx": "dev-master",
+                "php": "^7.0",
+                "rx/operator-extras": "^0.3.0"
+            },
+            "require-dev": {
+                "api-clients/test-utilities": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ApiClients\\Rx\\Operator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                }
+            ],
+            "time": "2017-01-06 06:48:42"
         },
         {
             "name": "api-clients/service",
@@ -1165,6 +1248,53 @@
                 "rx"
             ],
             "time": "2017-02-07T19:28:24+00:00"
+        },
+        {
+            "name": "rx/operator-extras",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RxPHP/RxOperatorExtras.git",
+                "reference": "851febebd3558350c55dcfecb8fd7df05b6dd88d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RxPHP/RxOperatorExtras/zipball/851febebd3558350c55dcfecb8fd7df05b6dd88d",
+                "reference": "851febebd3558350c55dcfecb8fd7df05b6dd88d",
+                "shasum": ""
+            },
+            "require": {
+                "reactivex/rxphp": "^1.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rx\\Extra\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Bonneau",
+                    "email": "matt@bonneau.net",
+                    "role": "Developer"
+                },
+                {
+                    "name": "David Dan",
+                    "email": "davidwdan@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Extra Operators and Observables for RxPHP",
+            "keywords": [
+                "reactivex",
+                "rx.php",
+                "rxphp"
+            ],
+            "time": "2016-05-21T02:51:35+00:00"
         },
         {
             "name": "rx/websocket",
@@ -2933,11 +3063,12 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
+        "api-clients/rx-operators": 20,
         "api-clients/service": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.0"
