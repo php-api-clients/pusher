@@ -53,9 +53,9 @@ final class AsyncClient
      * Listen on a channel
      *
      * @param string $channel Channel to listen on
-     * @return ObservableInterface
+     * @return Observable
      */
-    public function channel(string $channel): ObservableInterface
+    public function channel(string $channel): Observable
     {
         if (isset($this->channels[$channel])) {
             return $this->channels[$channel];
