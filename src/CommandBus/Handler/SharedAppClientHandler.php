@@ -6,7 +6,6 @@ use ApiClients\Client\Pusher\CommandBus\Command\SharedAppClientCommand;
 use ApiClients\Client\Pusher\Service\SharedAppClientService;
 use React\Promise\PromiseInterface;
 use function React\Promise\resolve;
-use function WyriHaximus\React\futureFunctionPromise;
 
 final class SharedAppClientHandler
 {
@@ -30,6 +29,6 @@ final class SharedAppClientHandler
      */
     public function handle(SharedAppClientCommand $command): PromiseInterface
     {
-        return resolve($this->service->handle($command->getAppId()));
+        return resolve($this->service->share($command->getAppId()));
     }
 }

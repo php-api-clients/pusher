@@ -13,12 +13,11 @@
   "require": {
     "php": "^7.0",
     "api-clients/command-bus": "^2.0",
-    "api-clients/rx-operators": "dev-master",
-    "api-clients/service": "dev-master",
+    "api-clients/rx-operators": "^2.0",
     "clue/block-react": "^1.1",
     "ocramius/package-versions": "^1.1",
-    "reactivex/rxphp": "^1.5.2",
-    "rx/websocket": "^0.10"
+    "reactivex/rxphp": "^2.0",
+    "rx/websocket": "^1.0"
   },
   "require-dev": {
     "api-clients/test-utilities": "^2.0"

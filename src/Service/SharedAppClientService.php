@@ -7,9 +7,8 @@ use ApiClients\Foundation\Service\ServiceInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\CancellablePromiseInterface;
 use function React\Promise\resolve;
-use function WyriHaximus\React\futureFunctionPromise;
 
-final class SharedAppClientService implements ServiceInterface
+final class SharedAppClientService
 {
     /**
      * @var LoopInterface
@@ -34,13 +33,13 @@ final class SharedAppClientService implements ServiceInterface
      * @param string|null $appId
      * @return CancellablePromiseInterface
      */
-    public function handle(string $appId = null): CancellablePromiseInterface
+    public function share(string $appId): CancellablePromiseInterface
     {
         if (isset($this->apps[$appId])) {
             return resolve($this->apps[$appId]);
         }
 
-        $this->apps[$appId] = new AsyncClient($this->loop, $appId);
+        $this->apps[$appId] = AsyncClient::create($this->loop, $appId);
         return resolve($this->apps[$appId]);
     }
 }

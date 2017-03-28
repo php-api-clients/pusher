@@ -2,17 +2,15 @@
 
 namespace ApiClients\Client\Pusher;
 
+use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
-use Rx\ObservableInterface;
 use Rx\ObserverInterface;
-use Rx\SchedulerInterface;
+use Rx\Scheduler;
 use Rx\Websocket\Client as WebsocketClient;
 use Rx\Websocket\MessageSubject;
-use function React\Promise\resolve;
-use function EventLoop\getLoop;
-use function EventLoop\setLoop;
+use Throwable;
 
 final class AsyncClient
 {
@@ -34,20 +32,46 @@ final class AsyncClient
     /**
      * @param LoopInterface $loop
      * @param string $app Application ID
+     * @param Resolver $resolver Optional DNS resolver
+     * @return AsyncClient
      */
-    public function __construct(LoopInterface $loop, string $app)
+    public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
     {
-        // Set loop into global look accessor
-        setLoop($loop);
+        try {
+            Scheduler::setAsyncFactory(function () use ($loop) {
+                return new Scheduler\EventLoopScheduler($loop);
+            });
+        } catch (Throwable $t) {
+        }
 
+        return new self(
+            new WebsocketClient(
+                ApiSettings::createUrl($app),
+                false,
+                [],
+                $loop,
+                $resolver
+            )
+        );
+    }
+
+    /**
+     * @internal
+     */
+    public function __construct(WebsocketClient $client)
+    {
         //Only create one connection and share the most recent among all subscriber
-        $this->client   = (new WebsocketClient(ApiSettings::createUrl($app)))->shareReplay(1);
+        $this->client   = $client->retryWhen(function (Observable $errors) {
+            return $this->handleLowLevelError($errors);
+        })->shareReplay(1);
         $this->messages = $this->client
             ->flatMap(function (MessageSubject $ms) {
+                //var_export($ms);
                 return $ms;
             })
             ->_ApiClients_jsonDecode()
             ->map(function (array $message) {
+                //var_export($message);
                 return Event::createFromMessage($message);
             });
     }
@@ -69,8 +93,7 @@ final class AsyncClient
         });
 
         $events = Observable::create(function (
-            ObserverInterface $observer,
-            SchedulerInterface $scheduler
+            ObserverInterface $observer
         ) use (
             $channel,
             $channelMessages
@@ -79,13 +102,14 @@ final class AsyncClient
                 ->filter(function (Event $event) {
                     return $event->getEvent() !== 'pusher_internal:subscription_succeeded';
                 })
-                ->subscribe($observer, $scheduler);
+                ->subscribe($observer);
 
             $this->send(['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]]);
 
             return new CallbackDisposable(function () use ($channel, $subscription) {
                 $this->send(['event' => 'pusher:unsubscribe', 'data' => ['channel' => $channel]]);
                 $subscription->dispose();
+                unset($this->channels[$channel]);
             });
         });
 
@@ -102,8 +126,19 @@ final class AsyncClient
     {
         $this->client
             ->take(1)
-            ->subscribeCallback(function (MessageSubject $ms) use ($message) {
+            ->subscribe(function (MessageSubject $ms) use ($message) {
                 $ms->send(json_encode($message));
             });
+    }
+
+    private function handleLowLevelError(Observable $errors)
+    {
+        $stream = $errors->subscribe(
+            function (Throwable $throwable) use (&$stream) {
+                echo (string)$throwable, PHP_EOL;
+            }
+        );
+        echo __LINE__, ': ', time(), PHP_EOL;
+        return $errors->delay(200);
     }
 }
