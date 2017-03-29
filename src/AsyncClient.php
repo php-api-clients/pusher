@@ -30,6 +30,11 @@ final class AsyncClient
     protected $channels = [];
 
     /**
+     * @var int
+     */
+    protected $delay = 200;
+
+    /**
      * @param LoopInterface $loop
      * @param string $app Application ID
      * @param Resolver $resolver Optional DNS resolver
@@ -61,8 +66,10 @@ final class AsyncClient
     public function __construct(WebsocketClient $client)
     {
         //Only create one connection and share the most recent among all subscriber
-        $this->client   = $client->retryWhen(function (Observable $errors) {
-            return $this->handleLowLevelError($errors);
+        $this->client = $client->retryWhen(function (Observable $errors) {
+            return $errors->flatMap(function (Throwable $throwable) {
+                return $this->handleLowLevelError($throwable);
+            });
         })->shareReplay(1);
         $this->messages = $this->client
             ->flatMap(function (MessageSubject $ms) {
@@ -131,14 +138,10 @@ final class AsyncClient
             });
     }
 
-    private function handleLowLevelError(Observable $errors)
+    private function handleLowLevelError(Throwable $throwable)
     {
-        $stream = $errors->subscribe(
-            function (Throwable $throwable) use (&$stream) {
-                echo (string)$throwable, PHP_EOL;
-            }
-        );
+        $this->delay *= 2;
         echo __LINE__, ': ', time(), PHP_EOL;
-        return $errors->delay(200);
+        return Observable::timer($this->delay);
     }
 }
