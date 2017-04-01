@@ -4,6 +4,7 @@ namespace ApiClients\Client\Pusher;
 
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
+use React\EventLoop\Timer\TimerInterface;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
 use Rx\ObserverInterface;
@@ -14,6 +15,19 @@ use Throwable;
 
 final class AsyncClient
 {
+    const NO_ACTIVITY_TIMEOUT = 120;
+    const NO_PING_RESPONSE_TIMEOUT = 30;
+
+    /**
+     * @var LoopInterface
+     */
+    protected $loop;
+
+    /**
+     * @var WebsocketClient
+     */
+    protected $lowLevelClient;
+
     /**
      * @var Observable\RefCountObservable
      */
@@ -35,6 +49,16 @@ final class AsyncClient
     protected $delay = 200;
 
     /**
+     * @var TimerInterface
+     */
+    private $noActivityTimer;
+
+    /**
+     * @var TimerInterface
+     */
+    private $pingIimeoutTimer;
+
+    /**
      * @param LoopInterface $loop
      * @param string $app Application ID
      * @param Resolver $resolver Optional DNS resolver
@@ -50,6 +74,7 @@ final class AsyncClient
         }
 
         return new self(
+            $loop,
             new WebsocketClient(
                 ApiSettings::createUrl($app),
                 false,
@@ -63,22 +88,25 @@ final class AsyncClient
     /**
      * @internal
      */
-    public function __construct(WebsocketClient $client)
+    public function __construct(LoopInterface $loop, WebsocketClient $client)
     {
+        $this->loop = $loop;
         //Only create one connection and share the most recent among all subscriber
-        $this->client = $client->retryWhen(function (Observable $errors) {
+        $this->lowLevelClient = $client;
+        $this->client = $this->lowLevelClient->retryWhen(function (Observable $errors) {
+            echo __LINE__, ': ', time(), PHP_EOL;
+            $this->resetActivityTimer();
             return $errors->flatMap(function (Throwable $throwable) {
                 return $this->handleLowLevelError($throwable);
             });
         })->shareReplay(1);
         $this->messages = $this->client
             ->flatMap(function (MessageSubject $ms) {
-                //var_export($ms);
                 return $ms;
             })
             ->_ApiClients_jsonDecode()
             ->map(function (array $message) {
-                //var_export($message);
+                $this->resetActivityTimer();
                 return Event::createFromMessage($message);
             });
     }
@@ -134,14 +162,42 @@ final class AsyncClient
         $this->client
             ->take(1)
             ->subscribe(function (MessageSubject $ms) use ($message) {
+                $this->resetActivityTimer();
                 $ms->send(json_encode($message));
             });
     }
 
     private function handleLowLevelError(Throwable $throwable)
     {
+        $this->resetActivityTimer();
         $this->delay *= 2;
+        echo get_class($throwable), PHP_EOL;
+        echo get_class($throwable->getPrevious()), PHP_EOL;
+        echo get_class($throwable->getPrevious()->getPrevious()), PHP_EOL;
+        echo get_class($throwable->getPrevious()->getPrevious()->getPrevious()), PHP_EOL;
         echo __LINE__, ': ', time(), PHP_EOL;
         return Observable::timer($this->delay);
+    }
+
+    private function resetActivityTimer()
+    {
+        echo 'resetActivityTimer', PHP_EOL;
+        if ($this->noActivityTimer instanceof TimerInterface) {
+            $this->noActivityTimer->cancel();
+        }
+
+        $this->noActivityTimer = $this->loop->addTimer(
+            self::NO_ACTIVITY_TIMEOUT,
+            function () {
+                echo 'resetActivityTimer:tick', PHP_EOL;
+                $this->send(['event' => 'pusher:ping']);
+                $this->pingIimeoutTimer = $this->loop->addTimer(
+                    self::NO_PING_RESPONSE_TIMEOUT,
+                    function () {
+                        $this->lowLevelClient->dispose();
+                    }
+                );
+            }
+        );
     }
 }
