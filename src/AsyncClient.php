@@ -17,16 +17,13 @@ final class AsyncClient
 {
     const NO_ACTIVITY_TIMEOUT = 120;
     const NO_PING_RESPONSE_TIMEOUT = 30;
+    //const NO_ACTIVITY_TIMEOUT = 12;
+    //const NO_PING_RESPONSE_TIMEOUT = 3;
 
     /**
      * @var LoopInterface
      */
     protected $loop;
-
-    /**
-     * @var WebsocketClient
-     */
-    protected $lowLevelClient;
 
     /**
      * @var Observable\RefCountObservable
@@ -37,6 +34,11 @@ final class AsyncClient
      * @var Observable\AnonymousObservable
      */
     protected $messages;
+
+    /**
+     * @var MessageSubject
+     */
+    protected $sendSubject;
 
     /**
      * @var array
@@ -91,22 +93,50 @@ final class AsyncClient
     public function __construct(LoopInterface $loop, WebsocketClient $client)
     {
         $this->loop = $loop;
-        //Only create one connection and share the most recent among all subscriber
-        $this->lowLevelClient = $client;
-        $this->client = $this->lowLevelClient->retryWhen(function (Observable $errors) {
-            echo __LINE__, ': ', time(), PHP_EOL;
-            $this->resetActivityTimer();
-            return $errors->flatMap(function (Throwable $throwable) {
-                return $this->handleLowLevelError($throwable);
-            });
-        })->shareReplay(1);
-        $this->messages = $this->client
+        $this->messages = $client->shareReplay(1)
+            // Save this subject for sending stuff
+            ->do(function (MessageSubject $ms) {
+                echo 'set snedSubject', PHP_EOL;
+                $this->sendSubject = $ms;
+            })
+
+            // Make sure if there is a disconnect or something
+            // that we unset the sendSubject
+            ->finally(function () {
+                echo 'unset snedSubject', PHP_EOL;
+                $this->sendSubject = null;
+            })
+
+
             ->flatMap(function (MessageSubject $ms) {
                 return $ms;
             })
+
+            // This is the ping/timeout functionality
+            ->flatMapLatest(function ($x) {
+                // this Observable emits the current value immediately
+                // if another value comes along, this all gets disposed (because we are using flatMapLatest)
+                // before the timeouts start get triggered
+                return Observable::never()
+                    ->timeout(self::NO_ACTIVITY_TIMEOUT * 1000)
+                    ->catch(function () use ($x) {
+                        echo 'send ping', PHP_EOL;
+                        // ping (do something that causes incoming stream to get a message)
+                        $this->send(['event' => 'pusher:ping']);
+                        // this timeout will actually timeout with a TimeoutException - causing
+                        //   everything above this to dispose
+                        return Observable::never()->timeout(self::NO_PING_RESPONSE_TIMEOUT * 1000);
+                    })
+                    ->startWith($x);
+            })
+            ->retryWhen(function (Observable $errors) {
+                echo __LINE__, ': ', time(), PHP_EOL;
+                return $errors->flatMap(function (Throwable $throwable) {
+                    return $this->handleLowLevelError($throwable);
+                });
+            })
             ->_ApiClients_jsonDecode()
             ->map(function (array $message) {
-                $this->resetActivityTimer();
                 return Event::createFromMessage($message);
             });
     }
@@ -159,45 +189,23 @@ final class AsyncClient
      */
     public function send(array $message)
     {
-        $this->client
-            ->take(1)
-            ->subscribe(function (MessageSubject $ms) use ($message) {
-                $this->resetActivityTimer();
-                $ms->send(json_encode($message));
-            });
+        if ($this->sendSubject ===  null) {
+            echo 'send subject is null when trying to send', PHP_EOL;
+            return;
+        }
+
+        echo __LINE__, ' Sending JSON: ', json_encode($message), PHP_EOL;
+        $this->sendSubject->onNext(json_encode($message));
     }
 
     private function handleLowLevelError(Throwable $throwable)
     {
-        $this->resetActivityTimer();
         $this->delay *= 2;
         echo get_class($throwable), PHP_EOL;
-        echo get_class($throwable->getPrevious()), PHP_EOL;
+        /*echo get_class($throwable->getPrevious()), PHP_EOL;
         echo get_class($throwable->getPrevious()->getPrevious()), PHP_EOL;
-        echo get_class($throwable->getPrevious()->getPrevious()->getPrevious()), PHP_EOL;
+        echo get_class($throwable->getPrevious()->getPrevious()->getPrevious()), PHP_EOL;*/
         echo __LINE__, ': ', time(), PHP_EOL;
         return Observable::timer($this->delay);
-    }
-
-    private function resetActivityTimer()
-    {
-        echo 'resetActivityTimer', PHP_EOL;
-        if ($this->noActivityTimer instanceof TimerInterface) {
-            $this->noActivityTimer->cancel();
-        }
-
-        $this->noActivityTimer = $this->loop->addTimer(
-            self::NO_ACTIVITY_TIMEOUT,
-            function () {
-                echo 'resetActivityTimer:tick', PHP_EOL;
-                $this->send(['event' => 'pusher:ping']);
-                $this->pingIimeoutTimer = $this->loop->addTimer(
-                    self::NO_PING_RESPONSE_TIMEOUT,
-                    function () {
-                        $this->lowLevelClient->dispose();
-                    }
-                );
-            }
-        );
     }
 }
