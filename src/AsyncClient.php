@@ -4,7 +4,6 @@ namespace ApiClients\Client\Pusher;
 
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
-use React\EventLoop\Timer\TimerInterface;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
 use Rx\ObserverInterface;
@@ -17,8 +16,8 @@ final class AsyncClient
 {
     const NO_ACTIVITY_TIMEOUT = 120;
     const NO_PING_RESPONSE_TIMEOUT = 30;
-    //const NO_ACTIVITY_TIMEOUT = 12;
-    //const NO_PING_RESPONSE_TIMEOUT = 3;
+
+    protected $noActivityTimeout = self::NO_ACTIVITY_TIMEOUT;
 
     /**
      * @var LoopInterface
@@ -49,16 +48,6 @@ final class AsyncClient
      * @var int
      */
     protected $delay = 200;
-
-    /**
-     * @var TimerInterface
-     */
-    private $noActivityTimer;
-
-    /**
-     * @var TimerInterface
-     */
-    private $pingIimeoutTimer;
 
     /**
      * @param LoopInterface $loop
@@ -93,17 +82,20 @@ final class AsyncClient
     public function __construct(LoopInterface $loop, WebsocketClient $client)
     {
         $this->loop = $loop;
-        $this->messages = $client->shareReplay(1)
+        $this->messages = $client
             // Save this subject for sending stuff
             ->do(function (MessageSubject $ms) {
-                echo 'set snedSubject', PHP_EOL;
                 $this->sendSubject = $ms;
+
+                // Resubscribe to an channels we where subscribed to when disconnected
+                foreach ($this->channels as $channel => $_) {
+                    $this->subscribeOnChannel($channel);
+                }
             })
 
             // Make sure if there is a disconnect or something
             // that we unset the sendSubject
             ->finally(function () {
-                echo 'unset snedSubject', PHP_EOL;
                 $this->sendSubject = null;
             })
 
@@ -118,9 +110,8 @@ final class AsyncClient
                 // if another value comes along, this all gets disposed (because we are using flatMapLatest)
                 // before the timeouts start get triggered
                 return Observable::never()
-                    ->timeout(self::NO_ACTIVITY_TIMEOUT * 1000)
+                    ->timeout($this->noActivityTimeout * 1000)
                     ->catch(function () use ($x) {
-                        echo 'send ping', PHP_EOL;
                         // ping (do something that causes incoming stream to get a message)
                         $this->send(['event' => 'pusher:ping']);
                         // this timeout will actually timeout with a TimeoutException - causing
@@ -129,16 +120,28 @@ final class AsyncClient
                     })
                     ->startWith($x);
             })
+
+            // Handle connection level errors
             ->retryWhen(function (Observable $errors) {
-                echo __LINE__, ': ', time(), PHP_EOL;
                 return $errors->flatMap(function (Throwable $throwable) {
                     return $this->handleLowLevelError($throwable);
                 });
             })
+
+            // Decode JSON
             ->_ApiClients_jsonDecode()
+
+            // Deal with connection established messages
             ->map(function (array $message) {
-                return Event::createFromMessage($message);
-            });
+                $event = Event::createFromMessage($message);
+
+                if ($event->getEvent() === 'pusher:connection_established') {
+                    $this->setActivityTimeout($event);
+                }
+
+                return $event;
+            })
+            ->share();
     }
 
     /**
@@ -169,7 +172,7 @@ final class AsyncClient
                 })
                 ->subscribe($observer);
 
-            $this->send(['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]]);
+            $this->subscribeOnChannel($channel);
 
             return new CallbackDisposable(function () use ($channel, $subscription) {
                 $this->send(['event' => 'pusher:unsubscribe', 'data' => ['channel' => $channel]]);
@@ -186,26 +189,54 @@ final class AsyncClient
      * Send a message through the client
      *
      * @param array $message Message to send, will be json encoded
+     *
+     * @return A bool indicating whether or not the connection was active
+     *         and the given message has been pass onto the connection.
      */
-    public function send(array $message)
+    public function send(array $message): bool
     {
         if ($this->sendSubject ===  null) {
-            echo 'send subject is null when trying to send', PHP_EOL;
-            return;
+            return false;
         }
 
-        echo __LINE__, ' Sending JSON: ', json_encode($message), PHP_EOL;
         $this->sendSubject->onNext(json_encode($message));
+        return true;
     }
 
     private function handleLowLevelError(Throwable $throwable)
     {
         $this->delay *= 2;
-        echo get_class($throwable), PHP_EOL;
-        /*echo get_class($throwable->getPrevious()), PHP_EOL;
-        echo get_class($throwable->getPrevious()->getPrevious()), PHP_EOL;
-        echo get_class($throwable->getPrevious()->getPrevious()->getPrevious()), PHP_EOL;*/
-        echo __LINE__, ': ', time(), PHP_EOL;
         return Observable::timer($this->delay);
+    }
+
+    /**
+     * @param string $channel
+     */
+    private function subscribeOnChannel(string $channel)
+    {
+        $this->send(['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]]);
+    }
+
+
+    /**
+     * Get connection activity timeout from connection established event
+     *
+     * @param Event $event
+     */
+    private function setActivityTimeout(Event $event)
+    {
+        $data = $event->getData();
+
+        // No activity_timeout found on event
+        if (!isset($data['activity_timeout'])) {
+            return;
+        }
+
+        // activity_timeout holds zero or invalid value (we don't want to hammer Pusher)
+        if ((int)$data['activity_timeout'] <= 0) {
+            return;
+        }
+
+        $this->noActivityTimeout = (int)$data['activity_timeout'];
     }
 }
