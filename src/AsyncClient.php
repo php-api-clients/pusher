@@ -155,6 +155,7 @@ final class AsyncClient
             return $this->channels[$channel];
         }
 
+        // Ensure we only get messages for the given channel
         $channelMessages = $this->messages->filter(function (Event $event) use ($channel) {
             return $event->getChannel() !== '' && $event->getChannel() === $channel;
         });
@@ -174,12 +175,16 @@ final class AsyncClient
             $this->subscribeOnChannel($channel);
 
             return new CallbackDisposable(function () use ($channel, $subscription) {
+                // Send unsubscribe event
                 $this->send(['event' => 'pusher:unsubscribe', 'data' => ['channel' => $channel]]);
+                // Dispose our own subscription to messages
                 $subscription->dispose();
+                // Remove our channel from the channel list so we don't resubscribe in case we reconnect
                 unset($this->channels[$channel]);
             });
         });
 
+        // Share stream amount subscribers to this channel
         $this->channels[$channel] = $events->share();
         return $this->channels[$channel];
     }
@@ -194,6 +199,7 @@ final class AsyncClient
      */
     public function send(array $message): bool
     {
+        // Don't send messages when we aren't connected
         if ($this->sendSubject ===  null) {
             return false;
         }
