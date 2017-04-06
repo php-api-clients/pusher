@@ -99,7 +99,6 @@ final class AsyncClient
                 $this->sendSubject = null;
             })
 
-
             ->flatMap(function (MessageSubject $ms) {
                 return $ms;
             })
