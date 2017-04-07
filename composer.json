@@ -2,8 +2,6 @@
   "name": "api-clients/pusher",
   "homepage": "https://php-api-clients.org/clients/pusher",
   "license": "MIT",
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "authors": [
     {
       "name": "Cees-Jan Kiewiet",

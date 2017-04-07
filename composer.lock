@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c061a6feaf1adc6cb1d87f80cb90cc0",
+    "content-hash": "7909fef9eaa097508216f7396d5457e8",
     "packages": [
         {
             "name": "api-clients/command-bus",
@@ -877,16 +877,16 @@
         },
         {
             "name": "react/dns",
-            "version": "v0.4.6",
+            "version": "v0.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/dns.git",
-                "reference": "a4c32f0021c742a1781c445270cb29a2d4b76fed"
+                "reference": "e09ca286e3e18fea93317315dd7fc59d7963af8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/dns/zipball/a4c32f0021c742a1781c445270cb29a2d4b76fed",
-                "reference": "a4c32f0021c742a1781c445270cb29a2d4b76fed",
+                "url": "https://api.github.com/repos/reactphp/dns/zipball/e09ca286e3e18fea93317315dd7fc59d7963af8a",
+                "reference": "e09ca286e3e18fea93317315dd7fc59d7963af8a",
                 "shasum": ""
             },
             "require": {
@@ -894,7 +894,7 @@
                 "react/cache": "~0.4.0|~0.3.0",
                 "react/promise": "~2.1|~1.2",
                 "react/promise-timer": "~1.1",
-                "react/socket": "^0.5 || ^0.4.4",
+                "react/socket": "^0.7 || ^0.6 || ^0.5 || ^0.4.4",
                 "react/stream": "^0.6 || ^0.5 || ^0.4.5"
             },
             "require-dev": {
@@ -915,7 +915,7 @@
                 "dns",
                 "dns-resolver"
             ],
-            "time": "2017-03-11T13:46:09+00:00"
+            "time": "2017-03-31T16:21:48+00:00"
         },
         {
             "name": "react/event-loop",
@@ -1269,16 +1269,16 @@
         },
         {
             "name": "reactivex/rxphp",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ReactiveX/RxPHP.git",
-                "reference": "4ad811032428074485d7ca99b779aec54b242982"
+                "reference": "ca5e94f7e7bacb9adcd4a3ed2b06a4a53e9ebcbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ReactiveX/RxPHP/zipball/4ad811032428074485d7ca99b779aec54b242982",
-                "reference": "4ad811032428074485d7ca99b779aec54b242982",
+                "url": "https://api.github.com/repos/ReactiveX/RxPHP/zipball/ca5e94f7e7bacb9adcd4a3ed2b06a4a53e9ebcbe",
+                "reference": "ca5e94f7e7bacb9adcd4a3ed2b06a4a53e9ebcbe",
                 "shasum": ""
             },
             "require": {
@@ -1330,7 +1330,7 @@
                 "reactive",
                 "rx"
             ],
-            "time": "2017-03-21T13:29:22+00:00"
+            "time": "2017-04-01T02:13:25+00:00"
         },
         {
             "name": "ringcentral/psr7",
@@ -1440,16 +1440,16 @@
         },
         {
             "name": "rx/websocket",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RxPHP/RxWebsocket.git",
-                "reference": "9e8e40f5356105965adb47731823a43edabd9069"
+                "reference": "fc60831de1863ed0469f97a1735f6ba07e3b572e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/9e8e40f5356105965adb47731823a43edabd9069",
-                "reference": "9e8e40f5356105965adb47731823a43edabd9069",
+                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/fc60831de1863ed0469f97a1735f6ba07e3b572e",
+                "reference": "fc60831de1863ed0469f97a1735f6ba07e3b572e",
                 "shasum": ""
             },
             "require": {
@@ -1495,7 +1495,7 @@
                 "rxphp",
                 "websocket"
             ],
-            "time": "2017-03-21T17:41:42+00:00"
+            "time": "2017-03-28T16:51:17+00:00"
         },
         {
             "name": "voryx/event-loop",
@@ -2184,16 +2184,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "5.0.3",
+            "version": "5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "4e99e1c4f9b05cbf4d6e84b100b3ff4107cf8cd1"
+                "reference": "cff36444733ac6d3f153866f55898373ca184610"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/4e99e1c4f9b05cbf4d6e84b100b3ff4107cf8cd1",
-                "reference": "4e99e1c4f9b05cbf4d6e84b100b3ff4107cf8cd1",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/cff36444733ac6d3f153866f55898373ca184610",
+                "reference": "cff36444733ac6d3f153866f55898373ca184610",
                 "shasum": ""
             },
             "require": {
@@ -2217,7 +2217,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.0.x-dev"
+                    "dev-master": "5.1.x-dev"
                 }
             },
             "autoload": {
@@ -2243,7 +2243,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-03-06T14:22:16+00:00"
+            "time": "2017-04-07T04:39:58+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3215,9 +3215,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": [],
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^7.0"
