@@ -13,15 +13,15 @@ $loop = Factory::create();
  * The App ID isn't a secret and comes from the bitstamp docs:
  * @link https://www.bitstamp.net/websocket/
  */
-$client = new AsyncClient($loop, 'de504dc5763aeef9ff52');
+$client = AsyncClient::create($loop, 'de504dc5763aeef9ff52');
 
 $channelitems = array('live_trades','live_trades_xrpusd');
 foreach ($channelitems as $channelitem) {
-    $client->channel($channelitem)->subscribe(new CallbackObserver(function (Event $event) {
+    $client->channel($channelitem)->subscribe(function (Event $event) {
         echo 'Channel: '. $event->getChannel(). PHP_EOL;
         echo 'Event: '. $event->getEvent(). PHP_EOL;
         echo 'Data: '. print_r($event->getData(),1). PHP_EOL;
-    }));
+    });
 }
 
 $loop->run();
