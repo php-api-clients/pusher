@@ -20,11 +20,6 @@ final class AsyncClient
     protected $noActivityTimeout = self::NO_ACTIVITY_TIMEOUT;
 
     /**
-     * @var LoopInterface
-     */
-    protected $loop;
-
-    /**
      * @var Observable\RefCountObservable
      */
     protected $client;
@@ -50,38 +45,10 @@ final class AsyncClient
     protected $delay = 200;
 
     /**
-     * @param LoopInterface $loop
-     * @param string $app Application ID
-     * @param Resolver $resolver Optional DNS resolver
-     * @return AsyncClient
-     */
-    public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
-    {
-        try {
-            Scheduler::setAsyncFactory(function () use ($loop) {
-                return new Scheduler\EventLoopScheduler($loop);
-            });
-        } catch (Throwable $t) {
-        }
-
-        return new self(
-            $loop,
-            new WebsocketClient(
-                ApiSettings::createUrl($app),
-                false,
-                [],
-                $loop,
-                $resolver
-            )
-        );
-    }
-
-    /**
      * @internal
      */
-    public function __construct(LoopInterface $loop, WebsocketClient $client)
+    public function __construct(Observable $client)
     {
-        $this->loop = $loop;
         $this->messages = $client
             // Save this subject for sending stuff
             ->do(function (MessageSubject $ms) {
@@ -144,9 +111,35 @@ final class AsyncClient
     }
 
     /**
-     * Listen on a channel
+     * @param  LoopInterface $loop
+     * @param  string        $app      Application ID
+     * @param  Resolver      $resolver Optional DNS resolver
+     * @return AsyncClient
+     */
+    public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
+    {
+        try {
+            Scheduler::setAsyncFactory(function () use ($loop) {
+                return new Scheduler\EventLoopScheduler($loop);
+            });
+        } catch (Throwable $t) {
+        }
+
+        return new self(
+            new WebsocketClient(
+                ApiSettings::createUrl($app),
+                false,
+                [],
+                $loop,
+                $resolver
+            )
+        );
+    }
+
+    /**
+     * Listen on a channel.
      *
-     * @param string $channel Channel to listen on
+     * @param  string     $channel Channel to listen on
      * @return Observable
      */
     public function channel(string $channel): Observable
@@ -186,16 +179,17 @@ final class AsyncClient
 
         // Share stream amount subscribers to this channel
         $this->channels[$channel] = $events->share();
+
         return $this->channels[$channel];
     }
 
     /**
-     * Send a message through the client
+     * Send a message through the client.
      *
      * @param array $message Message to send, will be json encoded
      *
      * @return A bool indicating whether or not the connection was active
-     *         and the given message has been pass onto the connection.
+     *           and the given message has been pass onto the connection.
      */
     public function send(array $message): bool
     {
@@ -205,12 +199,14 @@ final class AsyncClient
         }
 
         $this->sendSubject->onNext(json_encode($message));
+
         return true;
     }
 
     private function handleLowLevelError(Throwable $throwable)
     {
         $this->delay *= 2;
+
         return Observable::timer($this->delay);
     }
 
@@ -222,9 +218,8 @@ final class AsyncClient
         $this->send(['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]]);
     }
 
-
     /**
-     * Get connection activity timeout from connection established event
+     * Get connection activity timeout from connection established event.
      *
      * @param Event $event
      */
