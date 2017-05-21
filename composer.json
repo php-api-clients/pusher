@@ -1,5 +1,6 @@
 {
   "name": "api-clients/pusher",
+  "description": "Async first Pusher client",
   "homepage": "https://php-api-clients.org/clients/pusher",
   "license": "MIT",
   "authors": [
