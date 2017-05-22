@@ -102,7 +102,9 @@ final class AsyncClient
                 $event = Event::createFromMessage($message);
 
                 if ($event->getEvent() === 'pusher:error') {
-                    return Observable::fromPromise(reject(new PusherErrorException($event->getData()['message'], $event->getData()['code'])));
+                    return Observable::fromPromise(reject(
+                        new PusherErrorException($event->getData()['message'], $event->getData()['code'])
+                    ));
                 }
 
                 if ($event->getEvent() === 'pusher:connection_established') {
@@ -221,7 +223,11 @@ final class AsyncClient
      */
     private function handleLowLevelError(Throwable $throwable)
     {
-        if (!($throwable instanceof WebsocketErrorException) && !($throwable instanceof RuntimeException) && !($throwable instanceof PusherErrorException)) {
+        if (
+            !($throwable instanceof WebsocketErrorException) &&
+            !($throwable instanceof RuntimeException) &&
+            !($throwable instanceof PusherErrorException)
+        ) {
             return Observable::fromPromise(reject($throwable));
         }
 
