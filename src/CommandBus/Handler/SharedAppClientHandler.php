@@ -24,7 +24,7 @@ final class SharedAppClientHandler
     }
 
     /**
-     * @param SharedAppClientCommand $command
+     * @param  SharedAppClientCommand $command
      * @return PromiseInterface
      */
     public function handle(SharedAppClientCommand $command): PromiseInterface

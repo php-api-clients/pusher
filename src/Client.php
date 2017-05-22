@@ -31,7 +31,7 @@ final class Client
     }
 
     /**
-     * @param string $channel Channel to listen on
+     * @param string   $channel  Channel to listen on
      * @param callable $listener Listener to call on new messages
      */
     public function channel(string $channel, callable $listener)

@@ -19,18 +19,9 @@ final class Event
      */
     private $data;
 
-    public static function createFromMessage(array $message): self
-    {
-        return new self(
-            $message['event'],
-            json_decode($message['data'], true),
-            isset($message['channel']) ? $message['channel'] : ''
-        );
-    }
-
     /**
      * @param string $event
-     * @param array $data
+     * @param array  $data
      * @param string $channel
      */
     public function __construct(string $event, array $data, string $channel = '')
@@ -38,6 +29,15 @@ final class Event
         $this->event = $event;
         $this->data = $data;
         $this->channel = $channel;
+    }
+
+    public static function createFromMessage(array $message): self
+    {
+        return new self(
+            $message['event'],
+            json_decode($message['data'], true),
+            isset($message['channel']) ? $message['channel'] : ''
+        );
     }
 
     /**

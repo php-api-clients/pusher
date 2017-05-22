@@ -3,7 +3,6 @@
 namespace ApiClients\Client\Pusher\Service;
 
 use ApiClients\Client\Pusher\AsyncClient;
-use ApiClients\Foundation\Service\ServiceInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\CancellablePromiseInterface;
 use function React\Promise\resolve;
@@ -30,7 +29,7 @@ final class SharedAppClientService
     }
 
     /**
-     * @param string|null $appId
+     * @param  string|null                 $appId
      * @return CancellablePromiseInterface
      */
     public function share(string $appId): CancellablePromiseInterface
@@ -40,6 +39,7 @@ final class SharedAppClientService
         }
 
         $this->apps[$appId] = AsyncClient::create($this->loop, $appId);
+
         return resolve($this->apps[$appId]);
     }
 }
