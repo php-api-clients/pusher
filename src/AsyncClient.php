@@ -4,13 +4,17 @@ namespace ApiClients\Client\Pusher;
 
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
+use RuntimeException;
 use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Scheduler;
 use Rx\Websocket\Client as WebsocketClient;
 use Rx\Websocket\MessageSubject;
+use Rx\Websocket\WebsocketErrorException;
 use Throwable;
+use function React\Promise\reject;
+use function React\Promise\resolve;
 
 final class AsyncClient
 {
@@ -88,6 +92,26 @@ final class AsyncClient
                     ->startWith($x);
             })
 
+            // Decode JSON
+            ->_ApiClients_jsonDecode()
+
+            // Deal with connection established messages
+            ->flatMap(function (array $message) {
+                $this->delay = self::DEFAULT_DELAY;
+
+                $event = Event::createFromMessage($message);
+
+                if ($event->getEvent() === 'pusher:error') {
+                    return Observable::fromPromise(reject(new PusherErrorException($event->getData()['message'], $event->getData()['code'])));
+                }
+
+                if ($event->getEvent() === 'pusher:connection_established') {
+                    $this->setActivityTimeout($event);
+                }
+
+                return Observable::fromPromise(resolve($event));
+            })
+
             // Handle connection level errors
             ->retryWhen(function (Observable $errors) {
                 return $errors->flatMap(function (Throwable $throwable) {
@@ -95,22 +119,8 @@ final class AsyncClient
                 });
             })
 
-            // Decode JSON
-            ->_ApiClients_jsonDecode()
-
-            // Deal with connection established messages
-            ->map(function (array $message) {
-                $this->delay = self::DEFAULT_DELAY;
-
-                $event = Event::createFromMessage($message);
-
-                if ($event->getEvent() === 'pusher:connection_established') {
-                    $this->setActivityTimeout($event);
-                }
-
-                return $event;
-            })
-            ->share();
+        // Share client
+        ->share();
     }
 
     /**
@@ -206,8 +216,33 @@ final class AsyncClient
         return true;
     }
 
+    /**
+     *  Handle errors as described at https://pusher.com/docs/pusher_protocol#error-codes.
+     */
     private function handleLowLevelError(Throwable $throwable)
     {
+        if (!($throwable instanceof WebsocketErrorException) && !($throwable instanceof RuntimeException) && !($throwable instanceof PusherErrorException)) {
+            return Observable::fromPromise(reject($throwable));
+        }
+
+        $code = $throwable->getCode();
+        $pusherError = ($throwable instanceof WebsocketErrorException || $throwable instanceof PusherErrorException);
+
+        // Errors 4000-4099, don't retry connecting
+        if ($pusherError && $code >= 4000 && $code <= 4099) {
+            return Observable::fromPromise(reject($throwable));
+        }
+
+        // Errors 4100-4199 reconnect after 1 or more seconds, we do it after 1.001 second
+        if ($pusherError && $code >= 4100 && $code <= 4199) {
+            return Observable::timer(1001);
+        }
+
+        // Errors 4200-4299 connection closed by Pusher, reconnect immediately, we wait 0.001 second
+        if ($pusherError && $code >= 4200 && $code <= 4299) {
+            return Observable::timer(1);
+        }
+
         $this->delay *= 2;
 
         return Observable::timer($this->delay);
