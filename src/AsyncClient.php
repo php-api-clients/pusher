@@ -14,6 +14,7 @@ use Throwable;
 
 final class AsyncClient
 {
+    const DEFAULT_DELAY = 200;
     const NO_ACTIVITY_TIMEOUT = 120;
     const NO_PING_RESPONSE_TIMEOUT = 30;
 
@@ -42,7 +43,7 @@ final class AsyncClient
     /**
      * @var int
      */
-    protected $delay = 200;
+    protected $delay = self::DEFAULT_DELAY;
 
     /**
      * @internal
@@ -99,6 +100,8 @@ final class AsyncClient
 
             // Deal with connection established messages
             ->map(function (array $message) {
+                $this->delay = self::DEFAULT_DELAY;
+
                 $event = Event::createFromMessage($message);
 
                 if ($event->getEvent() === 'pusher:connection_established') {
