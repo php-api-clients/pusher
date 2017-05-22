@@ -223,8 +223,7 @@ final class AsyncClient
      */
     private function handleLowLevelError(Throwable $throwable)
     {
-        if (
-            !($throwable instanceof WebsocketErrorException) &&
+        if (!($throwable instanceof WebsocketErrorException) &&
             !($throwable instanceof RuntimeException) &&
             !($throwable instanceof PusherErrorException)
         ) {
