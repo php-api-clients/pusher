@@ -2,15 +2,14 @@
 
 namespace ApiClients\Tests\Client\Pusher;
 
-use React\Dns\Resolver\Resolver;
-use function React\Promise\reject;
-use RuntimeException;
 use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Tools\TestUtilities\TestCase;
+use React\Dns\Resolver\Resolver;
 use React\EventLoop\Factory;
+use RuntimeException;
 use Rx\Observable;
 use Rx\Scheduler\ImmediateScheduler;
-use Rx\Websocket\Client;
+use function React\Promise\reject;
 
 final class AsyncClientTest extends TestCase
 {
@@ -28,7 +27,8 @@ final class AsyncClientTest extends TestCase
         $observable = Observable::error($error, new ImmediateScheduler());
         $client = new AsyncClient($observable);
         $client->channel('test')->subscribe(
-            function () {},
+            function () {
+            },
             function ($e) use (&$capturedException) {
                 $capturedException = $e;
             }
@@ -44,7 +44,8 @@ final class AsyncClientTest extends TestCase
         $resolver->resolve('ws.pusherapp.com')->shouldBeCalled()->willReturn(reject($error));
         $client = AsyncClient::create($loop, 'abc', $resolver->reveal());
         $client->channel('test')->subscribe();
-        $loop->addTimer(1, function () {});
+        $loop->addTimer(1, function () {
+        });
         $loop->run();
     }
 }

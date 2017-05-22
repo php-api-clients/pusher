@@ -59,14 +59,13 @@ final class EventTest extends TestCase
             'foo-bar',
             $data,
         ];
-
     }
 
     /**
-     * @param array $input
+     * @param array  $input
      * @param string $event
      * @param string $channel
-     * @param array $data
+     * @param array  $data
      *
      * @dataProvider eventsProvider
      */

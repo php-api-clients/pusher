@@ -4,13 +4,17 @@ use ApiClients\Tools\TestUtilities\PhpCsFixerConfig;
 
 return (function ()
 {
-    $path = __DIR__ . DIRECTORY_SEPARATOR . 'src';
+    $path = __DIR__ . DIRECTORY_SEPARATOR;
+    $paths = [
+        $path . 'src',
+        $path . 'tests',
+    ];
 
     return PhpCsFixerConfig::create()
         ->setFinder(
             PhpCsFixer\Finder::create()
-                ->in($path)
-                ->append([$path])
+                ->in($paths)
+                ->append($paths)
         )
         ->setUsingCache(false)
     ;
