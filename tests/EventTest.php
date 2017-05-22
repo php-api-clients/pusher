@@ -45,6 +45,21 @@ final class EventTest extends TestCase
             $data,
         ];
 
+        $data = [
+            'time' => time(),
+            'pid' => getmypid(),
+        ];
+        yield [
+            [
+                'event' => 'event:name',
+                'channel' => 'foo-bar',
+                'data' => $data,
+            ],
+            'event:name',
+            'foo-bar',
+            $data,
+        ];
+
     }
 
     /**

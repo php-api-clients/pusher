@@ -35,7 +35,7 @@ final class Event
     {
         return new self(
             $message['event'],
-            json_decode($message['data'], true),
+            is_array($message['data']) ? $message['data'] : json_decode($message['data'], true),
             isset($message['channel']) ? $message['channel'] : ''
         );
     }
