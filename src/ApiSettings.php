@@ -7,9 +7,9 @@ use PackageVersions\Versions;
 final class ApiSettings
 {
     /**
-     * Create Pusher compatible version
+     * Create Pusher compatible version.
      *
-     * @param string $version
+     * @param  string $version
      * @return string
      */
     public static function getVersion(string $version = ''): string
@@ -28,9 +28,9 @@ final class ApiSettings
     }
 
     /**
-     * Create WebSocket URL for given App ID
+     * Create WebSocket URL for given App ID.
      *
-     * @param string $appId
+     * @param  string $appId
      * @return string
      */
     public static function createUrl(string $appId): string

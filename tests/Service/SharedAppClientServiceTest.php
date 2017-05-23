@@ -5,8 +5,8 @@ namespace ApiClients\Tests\Client\Pusher\Service;
 use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Client\Pusher\Service\SharedAppClientService;
 use ApiClients\Tools\TestUtilities\TestCase;
-use function EventLoop\getLoop;
 use function Clue\React\Block\await;
+use function EventLoop\getLoop;
 
 final class SharedAppClientServiceTest extends TestCase
 {
@@ -16,9 +16,9 @@ final class SharedAppClientServiceTest extends TestCase
         $appId = uniqid('app-id-', true);
         $handler = new SharedAppClientService($loop);
 
-        $app = await($handler->handle($appId), $loop);
-        self::assertInstanceOf(AsyncClient::class, await($handler->handle($appId), $loop));
-        self::assertSame($app, await($handler->handle($appId), $loop));
-        self::assertNotSame($app, await($handler->handle(md5($appId)), $loop));
+        $app = await($handler->share($appId), $loop);
+        self::assertInstanceOf(AsyncClient::class, $app);
+        self::assertSame($app, await($handler->share($appId), $loop));
+        self::assertNotSame($app, await($handler->share(md5($appId)), $loop));
     }
 }

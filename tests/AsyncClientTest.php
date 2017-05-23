@@ -1,14 +1,51 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace ApiClients\Tests\Client\Pusher;
 
+use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Tools\TestUtilities\TestCase;
+use React\Dns\Resolver\Resolver;
+use React\EventLoop\Factory;
+use RuntimeException;
+use Rx\Observable;
+use Rx\Scheduler\ImmediateScheduler;
+use function React\Promise\reject;
 
 final class AsyncClientTest extends TestCase
 {
-    public function testTrue()
+    public function testCreateFactory()
     {
-        self::assertTrue(true);
+        $loop = Factory::create();
+        $appId = uniqid('app-id-', true);
+        self::assertInstanceOf(AsyncClient::class, AsyncClient::create($loop, $appId));
+    }
+
+    public function testConnectionError()
+    {
+        $capturedException = null;
+        $error = new RuntimeException();
+        $observable = Observable::error($error, new ImmediateScheduler());
+        $client = new AsyncClient($observable);
+        $client->channel('test')->subscribe(
+            function () {
+            },
+            function ($e) use (&$capturedException) {
+                $capturedException = $e;
+            }
+        );
+        self::assertNull($capturedException);
+    }
+
+    public function testConnectionRetry()
+    {
+        $loop = Factory::create();
+        $error = new RuntimeException('', 4199);
+        $resolver = $this->prophesize(Resolver::class);
+        $resolver->resolve('ws.pusherapp.com')->shouldBeCalled()->willReturn(reject($error));
+        $client = AsyncClient::create($loop, 'abc', $resolver->reveal());
+        $client->channel('test')->subscribe();
+        $loop->addTimer(1, function () {
+        });
+        $loop->run();
     }
 }

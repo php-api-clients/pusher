@@ -5,37 +5,51 @@ cache:
   directories:
     - $HOME/.composer/cache/files
 
-## PHP versions we test against
-php:
-  - 7.0
-  - 7.1
-  - nightly
-
 ## Build matrix for lowest and highest possible targets
 matrix:
   include:
     - php: 7.0
-      env: dependencies=lowest
+      env:
+        - qaExtended=true
     - php: 7.1
-      env: dependencies=lowest
     - php: nightly
-      env: dependencies=lowest
+      env:
+        - dropPlatform=false
     - php: 7.0
-      env: dependencies=highest
+      env:
+        - dependencies=lowest
     - php: 7.1
-      env: dependencies=highest
+      env:
+        - dependencies=lowest
     - php: nightly
-      env: dependencies=highest
+      env:
+        - dependencies=lowest
+        - dropPlatform=false
+    - php: 7.0
+      env:
+        - dependencies=highest
+    - php: 7.1
+      env:
+        - dependencies=highest
+    - php: nightly
+      env:
+        - dependencies=highest
+        - dropPlatform=false
 
 ## Install or update dependencies
 install:
+  - composer validate
+  - if [ -z "$dropPlatform" ]; then composer config --unset platform.php; fi;
+  - if [ -z "$qaExtended" ]; then phpenv config-rm xdebug.ini || :; fi;
   - if [ -z "$dependencies" ]; then composer install --prefer-dist; fi;
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --prefer-dist -n; fi;
   - if [ "$dependencies" = "highest" ]; then composer update --prefer-dist -n; fi;
   - composer show
 
 ## Run the actual test
-script: make travis
+script:
+  - if [ -z "$qaExtended" ]; then make ci; fi;
+  - if [ "$qaExtended" = "true" ]; then make ci-extended; fi;
 
 ## Gather coverage and set it to coverage servers
-after_script: make travis-coverage
+after_script: if [ "$qaExtended" = "true" ]; then make ci-coverage; fi;
