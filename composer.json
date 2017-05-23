@@ -17,7 +17,8 @@
     "ocramius/package-versions": "^1.1",
     "react/dns": "^0.4.9",
     "reactivex/rxphp": "^2.0",
-    "rx/websocket": "^1.0"
+    "rx/websocket": "^1.0",
+    "voryx/event-loop": "^2.0.2"
   },
   "require-dev": {
     "api-clients/test-utilities": "^4.1"
