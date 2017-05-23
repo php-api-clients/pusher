@@ -114,7 +114,7 @@ final class AsyncClient
                 return Observable::fromPromise(resolve($event));
             })
 
-            // Handle connection level errors
+            // Handle connection level and Pusher procotol errors
             ->retryWhen(function (Observable $errors) {
                 return $errors->flatMap(function (Throwable $throwable) {
                     return $this->handleLowLevelError($throwable);
