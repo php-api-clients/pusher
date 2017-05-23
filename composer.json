@@ -15,6 +15,7 @@
     "api-clients/rx-operators": "^2.0",
     "clue/block-react": "^1.1",
     "ocramius/package-versions": "^1.1",
+    "react/dns": "^0.4.9",
     "reactivex/rxphp": "^2.0",
     "rx/websocket": "^1.0"
   },
