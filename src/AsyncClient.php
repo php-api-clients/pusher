@@ -107,6 +107,7 @@ final class AsyncClient
                     ));
                 }
 
+                // If this event represents the connection_established event set the timeout
                 if ($event->getEvent() === 'pusher:connection_established') {
                     $this->setActivityTimeout($event);
                 }
@@ -167,6 +168,7 @@ final class AsyncClient
      */
     public function channel(string $channel): Observable
     {
+        // Only join a channel once
         if (isset($this->channels[$channel])) {
             return $this->channels[$channel];
         }
@@ -176,12 +178,14 @@ final class AsyncClient
             return $event->getChannel() !== '' && $event->getChannel() === $channel;
         });
 
+        // Observable representing channel events
         $events = Observable::create(function (
             ObserverInterface $observer
         ) use (
             $channel,
             $channelMessages
         ) {
+            // Subscribe to channel messages but filter out internal events
             $subscription = $channelMessages
                 ->filter(function (Event $event) {
                     return $event->getEvent() !== 'pusher_internal:subscription_succeeded';
@@ -231,6 +235,7 @@ final class AsyncClient
      */
     private function handleLowLevelError(Throwable $throwable)
     {
+        // Only allow certain, relevant, exceptions
         if (!($throwable instanceof WebsocketErrorException) &&
             !($throwable instanceof RuntimeException) &&
             !($throwable instanceof PusherErrorException)
