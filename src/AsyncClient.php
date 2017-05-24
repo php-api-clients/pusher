@@ -255,6 +255,7 @@ final class AsyncClient
             return Observable::timer(1);
         }
 
+        // Double our delay each time we get here
         $this->delay *= 2;
 
         return Observable::timer($this->delay);
