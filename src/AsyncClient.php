@@ -133,7 +133,7 @@ final class AsyncClient
      */
     public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
     {
-        // Rather not do this, but have to untill ReactPHP gets it's own global loop
+        // Rather not do this, but have to until ReactPHP gets it's own global loop
         try {
             Scheduler::setAsyncFactory(function () use ($loop) {
                 return new Scheduler\EventLoopScheduler($loop);
