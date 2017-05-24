@@ -140,6 +140,13 @@ final class AsyncClient
         } catch (Throwable $t) {
         }
 
+        try {
+            Scheduler::setDefaultFactory(function () {
+                return Scheduler::getImmediate();
+            });
+        } catch (Throwable $t) {
+        }
+
         return new self(
             new WebsocketClient(
                 ApiSettings::createUrl($app),
