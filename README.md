@@ -34,6 +34,8 @@ $client->channel('channel_name')->subscribe(
         echo 'Done!', PHP_EOL;
     }
 );
+
+$loop->run();
 ```
 
 For more examples see the [examples directory](examples).
