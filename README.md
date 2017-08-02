@@ -7,11 +7,44 @@
 [![License](https://poser.pugx.org/api-clients/pusher/license.png)](https://packagist.org/packages/api-clients/pusher)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/php-api-clients/pusher/badge.svg)](https://appveyor-ci.org/php-api-clients/pusher)
 
+# Installation
 
-# Goals
+To install via [Composer](http://getcomposer.org/), use the command below, it will automatically detect the latest version and bind it with `^`.
 
-* 100% Pusher API support
-* Both synchronous and asynchronous
+```bash
+composer require api-clients/pusher 
+```
+
+# Usage
+
+```php
+$loop = Factory::create();
+$client = AsyncClient::create($loop, 'Application ID here');
+
+$client->channel($subReddit)->subscribe(
+    function (Event $event) { // Gets called for each incoming event
+        echo 'Channel: ', $event->getChannel(), PHP_EOL;
+        echo 'Event: ', $event->getEvent(), PHP_EOL;
+        echo 'Data: ', json_encode($event->getData()), PHP_EOL;
+    },
+    function ($e) { // Gets called on errors
+        echo (string)$e;
+    },
+    function () { // Gets called when the end of the stream is reached
+        echo 'Done!', PHP_EOL;
+    }
+);
+```
+
+For more examples see the [examples directory](examples).
+
+# Features
+
+This project aims to be 100% compatible with [Pusher's features](https://pusher.com/features) in `v1.2`.
+
+- [X] Subscribe to channels
+- [ ] Presence channels
+- [ ] Authentication
 
 # License
 
