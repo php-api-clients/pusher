@@ -21,7 +21,7 @@ composer require api-clients/pusher
 $loop = Factory::create();
 $client = AsyncClient::create($loop, 'Application ID here');
 
-$client->channel($subReddit)->subscribe(
+$client->channel('channel_name')->subscribe(
     function (Event $event) { // Gets called for each incoming event
         echo 'Channel: ', $event->getChannel(), PHP_EOL;
         echo 'Event: ', $event->getEvent(), PHP_EOL;
