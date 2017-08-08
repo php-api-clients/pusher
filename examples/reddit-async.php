@@ -31,6 +31,7 @@ $subReddits->subscribe(
     },
     function () {
         echo 'Done!', PHP_EOL;
-    });
+    }
+);
 
 $loop->run();
