@@ -14,22 +14,24 @@ $loop = Factory::create();
  */
 $client = AsyncClient::create($loop, require 'reddit.key.php');
 
-$subReddits = $argv;
-array_shift($subReddits);
-foreach ($subReddits as $subReddit) {
-    $client->channel($subReddit)->subscribe(
-        function (Event $event) {
-            echo 'Channel: ', $event->getChannel(), PHP_EOL;
-            echo 'Event: ', $event->getEvent(), PHP_EOL;
-            echo 'Data: ', json_encode($event->getData()), PHP_EOL;
-        },
-        function ($e) {
-            echo (string)$e;
-        },
-        function () {
-            echo 'Done!', PHP_EOL;
-        }
-    );
-}
+$subReddits = \Rx\Observable::fromArray($argv)
+    ->skip(1)
+    ->flatMap(function ($subReddit) use ($client) {
+        return $client->channel($subReddit);
+    });
+
+$subReddits->subscribe(
+    function (Event $event) {
+        echo 'Channel: ', $event->getChannel(), PHP_EOL;
+        echo 'Event: ', $event->getEvent(), PHP_EOL;
+        echo 'Data: ', json_encode($event->getData()), PHP_EOL;
+    },
+    function ($e) {
+        echo (string)$e;
+    },
+    function () {
+        echo 'Done!', PHP_EOL;
+    }
+);
 
 $loop->run();
