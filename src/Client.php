@@ -4,10 +4,8 @@ namespace ApiClients\Client\Pusher;
 
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
-use React\Promise\Deferred;
-use Throwable;
+use Rx\Observable;
 use function Clue\React\Block\await;
-use function React\Promise\all;
 
 final class Client
 {
@@ -36,12 +34,7 @@ final class Client
      */
     public function channel(string $channel, callable $listener)
     {
-        $this->channels(
-            [
-                $channel,
-            ],
-            $listener
-        );
+        $this->channels([$channel], $listener);
     }
 
     /**
@@ -50,24 +43,12 @@ final class Client
      */
     public function channels(array $channels, callable $listener)
     {
-        $promises = [];
-        foreach ($channels as $channel) {
-            $deferred = new Deferred();
-            $this->client->channel($channel)->subscribe(
-                $listener,
-                function (Throwable $throwable) {
-                    throw $throwable;
-                },
-                function () use ($deferred) {
-                    $deferred->resolve();
-                }
-            );
-            $promises[] = $deferred->promise();
-        }
+        $promise = Observable::fromArray($channels)
+            ->flatMap([$this->client, 'channel'])
+            ->do($listener)
+            ->count()
+            ->toPromise();
 
-        await(
-            all($promises),
-            $this->loop
-        );
+        await($promise, $this->loop);
     }
 }

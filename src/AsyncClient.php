@@ -13,8 +13,6 @@ use Rx\Websocket\Client as WebsocketClient;
 use Rx\Websocket\MessageSubject;
 use Rx\Websocket\WebsocketErrorException;
 use Throwable;
-use function React\Promise\reject;
-use function React\Promise\resolve;
 
 final class AsyncClient
 {
@@ -102,9 +100,9 @@ final class AsyncClient
                 $event = Event::createFromMessage($message);
 
                 if ($event->getEvent() === 'pusher:error') {
-                    return Observable::fromPromise(reject(
-                        new PusherErrorException($event->getData()['message'], $event->getData()['code'])
-                    ));
+                    $throwable = new PusherErrorException($event->getData()['message'], $event->getData()['code']);
+
+                    return Observable::error($throwable);
                 }
 
                 // If this event represents the connection_established event set the timeout
@@ -112,7 +110,7 @@ final class AsyncClient
                     $this->setActivityTimeout($event);
                 }
 
-                return Observable::fromPromise(resolve($event));
+                return Observable::of($event);
             })
 
             // Handle connection level and Pusher procotol errors
@@ -240,7 +238,7 @@ final class AsyncClient
             !($throwable instanceof RuntimeException) &&
             !($throwable instanceof PusherErrorException)
         ) {
-            return Observable::fromPromise(reject($throwable));
+            return Observable::error($throwable);
         }
 
         $code = $throwable->getCode();
@@ -248,7 +246,7 @@ final class AsyncClient
 
         // Errors 4000-4099, don't retry connecting
         if ($pusherError && $code >= 4000 && $code <= 4099) {
-            return Observable::fromPromise(reject($throwable));
+            return Observable::error($throwable);
         }
 
         // Errors 4100-4199 reconnect after 1 or more seconds, we do it after 1.001 second
