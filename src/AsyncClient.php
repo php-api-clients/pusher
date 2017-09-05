@@ -5,12 +5,9 @@ namespace ApiClients\Client\Pusher;
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
 use RuntimeException;
-use Rx\Disposable\CallbackDisposable;
 use Rx\Observable;
-use Rx\ObserverInterface;
 use Rx\Scheduler;
-use Rx\Websocket\Client as WebsocketClient;
-use Rx\Websocket\MessageSubject;
+use Rx\Subject\Subject;
 use Rx\Websocket\WebsocketErrorException;
 use Throwable;
 
@@ -20,149 +17,96 @@ final class AsyncClient
     const NO_ACTIVITY_TIMEOUT = 120;
     const NO_PING_RESPONSE_TIMEOUT = 30;
 
-    protected $noActivityTimeout = self::NO_ACTIVITY_TIMEOUT;
-
     /**
-     * @var Observable\RefCountObservable
+     * @var Observable
      */
-    protected $client;
-
-    /**
-     * @var Observable\AnonymousObservable
-     */
-    protected $messages;
-
-    /**
-     * @var MessageSubject
-     */
-    protected $sendSubject;
+    private $messages;
 
     /**
      * @var array
      */
-    protected $channels = [];
+    private $channels = [];
 
     /**
      * @var int
      */
-    protected $delay = self::DEFAULT_DELAY;
+    private $delay = self::DEFAULT_DELAY;
+
+    /**
+     * @var Subject
+     */
+    private $client;
+
+    /**
+     * @var Observable
+     */
+    private $connected;
 
     /**
      * @internal
+     * @param Subject $client
+     * @throws \InvalidArgumentException
      */
-    public function __construct(Observable $client)
+    public function __construct(Subject $client)
     {
-        $this->messages = $client
-            // Save this subject for sending stuff
-            ->do(function (MessageSubject $ms) {
-                $this->sendSubject = $ms;
+        $this->client = $client;
 
-                // Resubscribe to an channels we where subscribed to when disconnected
-                foreach ($this->channels as $channel => $_) {
-                    $this->subscribeOnChannel($channel);
-                }
-            })
-
-            // Make sure if there is a disconnect or something
-            // that we unset the sendSubject
-            ->finally(function () {
-                $this->sendSubject = null;
-            })
-
-            ->flatMap(function (MessageSubject $ms) {
-                return $ms;
-            })
-
-            // This is the ping/timeout functionality
-            ->flatMapLatest(function ($x) {
-                // this Observable emits the current value immediately
-                // if another value comes along, this all gets disposed (because we are using flatMapLatest)
-                // before the timeouts start get triggered
-                return Observable::never()
-                    ->timeout($this->noActivityTimeout * 1000)
-                    ->catch(function () use ($x) {
-                        // ping (do something that causes incoming stream to get a message)
-                        $this->send(['event' => 'pusher:ping']);
-                        // this timeout will actually timeout with a TimeoutException - causing
-                        //   everything above this to dispose
-                        return Observable::never()->timeout(self::NO_PING_RESPONSE_TIMEOUT * 1000);
-                    })
-                    ->startWith($x);
-            })
-
-            // Decode JSON
+        /** @var Observable $events */
+        $events = $client
             ->_ApiClients_jsonDecode()
+            ->map([Event::class, 'createFromMessage'])
+            ->singleInstance();
 
-            // Deal with connection established messages
-            ->flatMap(function (array $message) {
-                $this->delay = self::DEFAULT_DELAY;
+        $pusherErrors = $events
+            ->filter([Event::class, 'isError'])
+            ->flatMap(function (Event $event) {
+                $throwable = new PusherErrorException($event->getData()['message'], (int)$event->getData()['code']);
 
-                $event = Event::createFromMessage($message);
+                return Observable::error($throwable);
+            });
 
-                if ($event->getEvent() === 'pusher:error') {
-                    $throwable = new PusherErrorException($event->getData()['message'], $event->getData()['code']);
+        $this->connected = $events
+            ->filter([Event::class, 'connectionEstablished'])
+            ->singleInstance();
 
-                    return Observable::error($throwable);
-                }
-
-                // If this event represents the connection_established event set the timeout
-                if ($event->getEvent() === 'pusher:connection_established') {
-                    $this->setActivityTimeout($event);
-                }
-
-                return Observable::of($event);
-            })
-
-            // Handle connection level and Pusher procotol errors
+        $this->messages = $events
+            ->merge($this->timeout($events))
+            ->merge($pusherErrors)
             ->retryWhen(function (Observable $errors) {
                 return $errors->flatMap(function (Throwable $throwable) {
                     return $this->handleLowLevelError($throwable);
                 });
             })
-
-        // Share client
-        ->share();
+            ->singleInstance();
     }
 
     /**
      * @param  LoopInterface $loop
-     * @param  string        $app      Application ID
-     * @param  Resolver      $resolver Optional DNS resolver
+     * @param  string $app Application ID
+     * @param  Resolver $resolver Optional DNS resolver
      * @return AsyncClient
+     * @throws \InvalidArgumentException
      */
     public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
     {
-        // Rather not do this, but have to until ReactPHP gets it's own global loop
         try {
-            Scheduler::setAsyncFactory(function () use ($loop) {
+            Scheduler::setDefaultFactory(function () use ($loop) {
                 return new Scheduler\EventLoopScheduler($loop);
             });
         } catch (Throwable $t) {
         }
 
-        try {
-            Scheduler::setDefaultFactory(function () {
-                return Scheduler::getImmediate();
-            });
-        } catch (Throwable $t) {
-        }
-
         return new self(
-            new WebsocketClient(
-                ApiSettings::createUrl($app),
-                false,
-                [],
-                $loop,
-                $resolver
-            )
+            new Websocket(ApiSettings::createUrl($app), false, [], $loop, $resolver)
         );
     }
 
     /**
      * Listen on a channel.
      *
-     * @param  string     $channel Channel to listen on
+     * @param  string $channel Channel to listen on
      * @return Observable
+     * @throws \InvalidArgumentException
      */
     public function channel(string $channel): Observable
     {
@@ -176,34 +120,26 @@ final class AsyncClient
             return $event->getChannel() !== '' && $event->getChannel() === $channel;
         });
 
+        $subscribe = $this->connected
+            ->do(function () use ($channel) {
+                // Subscribe to pusher channel after connected
+                $this->send(Event::subscribeOn($channel));
+            })
+            ->flatMapTo(Observable::empty());
+
         // Observable representing channel events
-        $events = Observable::create(function (
-            ObserverInterface $observer
-        ) use (
-            $channel,
-            $channelMessages
-        ) {
-            // Subscribe to channel messages but filter out internal events
-            $subscription = $channelMessages
-                ->filter(function (Event $event) {
-                    return $event->getEvent() !== 'pusher_internal:subscription_succeeded';
-                })
-                ->subscribe($observer);
-
-            $this->subscribeOnChannel($channel);
-
-            return new CallbackDisposable(function () use ($channel, $subscription) {
+        $events = $channelMessages
+            ->merge($subscribe)
+            ->filter([Event::class, 'subscriptionSucceeded'])
+            ->finally(function () use ($channel) {
                 // Send unsubscribe event
-                $this->send(['event' => 'pusher:unsubscribe', 'data' => ['channel' => $channel]]);
-                // Dispose our own subscription to messages
-                $subscription->dispose();
+                $this->send(Event::unsubscribeOn($channel));
+
                 // Remove our channel from the channel list so we don't resubscribe in case we reconnect
                 unset($this->channels[$channel]);
             });
-        });
 
-        // Share stream amount subscribers to this channel
-        $this->channels[$channel] = $events->share();
+        $this->channels[$channel] = $events;
 
         return $this->channels[$channel];
     }
@@ -213,25 +149,18 @@ final class AsyncClient
      *
      * @param array $message Message to send, will be json encoded
      *
-     * @return A bool indicating whether or not the connection was active
-     *           and the given message has been pass onto the connection.
      */
-    public function send(array $message): bool
+    public function send(array $message)
     {
-        // Don't send messages when we aren't connected
-        if ($this->sendSubject ===  null) {
-            return false;
-        }
-
-        $this->sendSubject->onNext(json_encode($message));
-
-        return true;
+        $this->client->onNext(json_encode($message));
     }
 
     /**
-     *  Handle errors as described at https://pusher.com/docs/pusher_protocol#error-codes.
+     * Handle errors as described at https://pusher.com/docs/pusher_protocol#error-codes.
+     * @param Throwable $throwable
+     * @return Observable
      */
-    private function handleLowLevelError(Throwable $throwable)
+    private function handleLowLevelError(Throwable $throwable): Observable
     {
         // Only allow certain, relevant, exceptions
         if (!($throwable instanceof WebsocketErrorException) &&
@@ -266,32 +195,38 @@ final class AsyncClient
     }
 
     /**
-     * @param string $channel
-     */
-    private function subscribeOnChannel(string $channel)
-    {
-        $this->send(['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]]);
-    }
-
-    /**
-     * Get connection activity timeout from connection established event.
+     * Returns an observable of TimeoutException.
+     * The timeout observable will get cancelled every time a new event is received.
      *
-     * @param Event $event
+     * @param Observable $events
+     * @return Observable
      */
-    private function setActivityTimeout(Event $event)
+    public function timeout(Observable $events): Observable
     {
-        $data = $event->getData();
+        $timeoutDuration = $this->connected->map(function (Event $event) {
+            return ($event->getData()['activity_timeout'] ?? self::NO_ACTIVITY_TIMEOUT) * 1000;
+        });
 
-        // No activity_timeout found on event
-        if (!isset($data['activity_timeout'])) {
-            return;
-        }
+        return $timeoutDuration
+            ->combineLatest([$events])
+            ->pluck(0)
+            ->concat(Observable::of(-1))
+            ->flatMapLatest(function (int $time) {
 
-        // activity_timeout holds zero or invalid value (we don't want to hammer Pusher)
-        if ((int)$data['activity_timeout'] <= 0) {
-            return;
-        }
+                // If the events observable ends, return an empty observable so we don't keep the stream alive
+                if ($time === -1) {
+                    return Observable::empty();
+                }
 
-        $this->noActivityTimeout = (int)$data['activity_timeout'];
+                return Observable::never()
+                    ->timeout($time)
+                    ->catch(function () use ($time) {
+                        // ping (do something that causes incoming stream to get a message)
+                        $this->send(Event::ping());
+                        // this timeout will actually timeout with a TimeoutException - causing
+                        // everything above this to dispose
+                        return Observable::never()->timeout($time);
+                    });
+            });
     }
 }

@@ -31,8 +31,12 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "ApiClients\\Tests\\Client\\Pusher\\": "tests/"
-    }
+      "ApiClients\\Tests\\Client\\Pusher\\": "tests/",
+      "Rx\\": "vendor/reactivex/rxphp/test/Rx"
+    },
+    "files": [
+      "vendor/reactivex/rxphp/test/helper-functions.php"
+    ]
   },
   "config": {
     "sort-packages": true,
