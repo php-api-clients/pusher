@@ -21,7 +21,7 @@ final class Event implements \JsonSerializable
 
     /**
      * @param string $event
-     * @param array $data
+     * @param array  $data
      * @param string $channel
      */
     public function __construct(string $event, array $data, string $channel = '')

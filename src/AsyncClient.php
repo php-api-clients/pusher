@@ -44,7 +44,7 @@ final class AsyncClient
 
     /**
      * @internal
-     * @param Subject $client
+     * @param  Subject                   $client
      * @throws \InvalidArgumentException
      */
     public function __construct(Subject $client)
@@ -81,11 +81,11 @@ final class AsyncClient
     }
 
     /**
-     * @param  LoopInterface $loop
-     * @param  string $app Application ID
-     * @param  Resolver $resolver Optional DNS resolver
-     * @return AsyncClient
+     * @param  LoopInterface             $loop
+     * @param  string                    $app      Application ID
+     * @param  Resolver                  $resolver Optional DNS resolver
      * @throws \InvalidArgumentException
+     * @return AsyncClient
      */
     public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
     {
@@ -104,9 +104,9 @@ final class AsyncClient
     /**
      * Listen on a channel.
      *
-     * @param  string $channel Channel to listen on
-     * @return Observable
+     * @param  string                    $channel Channel to listen on
      * @throws \InvalidArgumentException
+     * @return Observable
      */
     public function channel(string $channel): Observable
     {
@@ -156,8 +156,44 @@ final class AsyncClient
     }
 
     /**
+     * Returns an observable of TimeoutException.
+     * The timeout observable will get cancelled every time a new event is received.
+     *
+     * @param  Observable $events
+     * @return Observable
+     */
+    public function timeout(Observable $events): Observable
+    {
+        $timeoutDuration = $this->connected->map(function (Event $event) {
+            return ($event->getData()['activity_timeout'] ?? self::NO_ACTIVITY_TIMEOUT) * 1000;
+        });
+
+        return $timeoutDuration
+            ->combineLatest([$events])
+            ->pluck(0)
+            ->concat(Observable::of(-1))
+            ->flatMapLatest(function (int $time) {
+
+                // If the events observable ends, return an empty observable so we don't keep the stream alive
+                if ($time === -1) {
+                    return Observable::empty();
+                }
+
+                return Observable::never()
+                    ->timeout($time)
+                    ->catch(function () use ($time) {
+                        // ping (do something that causes incoming stream to get a message)
+                        $this->send(Event::ping());
+                        // this timeout will actually timeout with a TimeoutException - causing
+                        // everything above this to dispose
+                        return Observable::never()->timeout($time);
+                    });
+            });
+    }
+
+    /**
      * Handle errors as described at https://pusher.com/docs/pusher_protocol#error-codes.
-     * @param Throwable $throwable
+     * @param  Throwable  $throwable
      * @return Observable
      */
     private function handleLowLevelError(Throwable $throwable): Observable
@@ -192,41 +228,5 @@ final class AsyncClient
         $this->delay *= 2;
 
         return Observable::timer($this->delay);
-    }
-
-    /**
-     * Returns an observable of TimeoutException.
-     * The timeout observable will get cancelled every time a new event is received.
-     *
-     * @param Observable $events
-     * @return Observable
-     */
-    public function timeout(Observable $events): Observable
-    {
-        $timeoutDuration = $this->connected->map(function (Event $event) {
-            return ($event->getData()['activity_timeout'] ?? self::NO_ACTIVITY_TIMEOUT) * 1000;
-        });
-
-        return $timeoutDuration
-            ->combineLatest([$events])
-            ->pluck(0)
-            ->concat(Observable::of(-1))
-            ->flatMapLatest(function (int $time) {
-
-                // If the events observable ends, return an empty observable so we don't keep the stream alive
-                if ($time === -1) {
-                    return Observable::empty();
-                }
-
-                return Observable::never()
-                    ->timeout($time)
-                    ->catch(function () use ($time) {
-                        // ping (do something that causes incoming stream to get a message)
-                        $this->send(Event::ping());
-                        // this timeout will actually timeout with a TimeoutException - causing
-                        // everything above this to dispose
-                        return Observable::never()->timeout($time);
-                    });
-            });
     }
 }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace ApiClients\Tests\Client\Pusher;
 
@@ -20,11 +20,6 @@ class TestWebSocketSubject extends Subject
         $this->scheduler = $scheduler;
     }
 
-    protected function _subscribe(ObserverInterface $observer): DisposableInterface
-    {
-        return $this->observable->subscribe($observer);
-    }
-
     public function getSentMessages(): array
     {
         return $this->sentMessages;
@@ -33,5 +28,10 @@ class TestWebSocketSubject extends Subject
     public function onNext($value)
     {
         $this->sentMessages[] = [$this->scheduler->getClock(), $value];
+    }
+
+    protected function _subscribe(ObserverInterface $observer): DisposableInterface
+    {
+        return $this->observable->subscribe($observer);
     }
 }

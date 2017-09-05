@@ -4,11 +4,11 @@ namespace ApiClients\Tests\Client\Pusher;
 
 use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Client\Pusher\Event;
+use React\Dns\Resolver\Resolver;
 use React\EventLoop\Factory;
+use RuntimeException;
 use Rx\Exception\TimeoutException;
 use Rx\Observable;
-use React\Dns\Resolver\Resolver;
-use RuntimeException;
 use function React\Promise\reject;
 
 final class AsyncClientTest extends TestCase
@@ -66,7 +66,7 @@ final class AsyncClientTest extends TestCase
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
-            onCompleted(235)
+            onCompleted(235),
         ]);
 
         $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
@@ -76,7 +76,7 @@ final class AsyncClientTest extends TestCase
         });
 
         $this->assertMessages([
-            onCompleted(237)
+            onCompleted(237),
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 235)], $observable->getSubscriptions());
@@ -86,7 +86,7 @@ final class AsyncClientTest extends TestCase
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
-            onCompleted(435)
+            onCompleted(435),
         ]);
 
         $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
@@ -105,7 +105,7 @@ final class AsyncClientTest extends TestCase
         $observable = $this->createHotObservable([
             onNext(150, 1),
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
-            onCompleted(635)
+            onCompleted(635),
         ]);
 
         $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
@@ -130,7 +130,7 @@ final class AsyncClientTest extends TestCase
             onNext(150, 1),
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
             onNext(340, '{"event":"pusher_internal:subscription_succeeded","data":"{}","channel":"test"}'),
-            onCompleted(635)
+            onCompleted(635),
         ]);
 
         $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
@@ -159,7 +159,7 @@ final class AsyncClientTest extends TestCase
             onNext(370, '{"event":"new-listing","data":["test10"],"channel":"other"}'),
             onNext(390, '{"event":"new-listing","data":["test2"],"channel":"test"}'),
             onNext(400, '{"event":"new-listing","data":["test3"],"channel":"test"}'),
-            onCompleted(900)
+            onCompleted(900),
         ]);
 
         $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
@@ -172,7 +172,7 @@ final class AsyncClientTest extends TestCase
             onNext(350, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
             onNext(390, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
             onNext(400, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
-            onCompleted(902)
+            onCompleted(902),
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 900)], $observable->getSubscriptions());
@@ -253,7 +253,7 @@ final class AsyncClientTest extends TestCase
         $this->assertMessages([
             onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
             onNext(1020, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
-            onCompleted(1040)
+            onCompleted(1040),
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 570), subscribe(670, 1040)], $observable->getSubscriptions());
