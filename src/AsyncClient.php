@@ -97,7 +97,7 @@ final class AsyncClient
         }
 
         return new self(
-            new Websocket(ApiSettings::createUrl($app), false, [], $loop, $resolver)
+            new WebSocket(ApiSettings::createUrl($app), false, [], $loop, $resolver)
         );
     }
 
