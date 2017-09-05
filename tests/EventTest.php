@@ -3,7 +3,6 @@
 namespace ApiClients\Tests\Client\Pusher;
 
 use ApiClients\Client\Pusher\Event;
-use ApiClients\Tools\TestUtilities\TestCase;
 
 final class EventTest extends TestCase
 {
