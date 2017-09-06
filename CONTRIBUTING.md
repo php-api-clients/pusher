@@ -14,13 +14,9 @@ Make sure the tests pass:
 
     make unit
 
-Make sure the tests pass on all supported PHP versions (requires docker):
-
-    make dunit
-
 Make your change. Add tests for your change. Make the tests pass:
 
-    make dunit && make unit
+    make unit
     
 Before committing and submitting your pull request make sure it passes PSR2 coding style, unit tests pass and pass on all supported PHP versions:
 
