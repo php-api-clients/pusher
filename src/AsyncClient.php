@@ -128,7 +128,7 @@ final class AsyncClient
             ->flatMapTo(Observable::empty());
 
         // Observable representing channel events
-        $events = $channelMessages
+        $this->channels[$channel] = $channelMessages
             ->merge($subscribe)
             ->filter([Event::class, 'subscriptionSucceeded'])
             ->finally(function () use ($channel) {
@@ -137,9 +137,8 @@ final class AsyncClient
 
                 // Remove our channel from the channel list so we don't resubscribe in case we reconnect
                 unset($this->channels[$channel]);
-            });
-
-        $this->channels[$channel] = $events;
+            })
+            ->singleInstance();
 
         return $this->channels[$channel];
     }

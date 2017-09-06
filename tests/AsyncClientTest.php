@@ -183,6 +183,56 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
+    public function testPusherDataSameChannel()
+    {
+        $observable = $this->createColdObservable([
+            onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
+            onNext(340, '{"event":"pusher_internal:subscription_succeeded","data":"{}","channel":"test"}'),
+            onNext(350, '{"event":"new-listing","data":["test1"],"channel":"test"}'),
+            onNext(370, '{"event":"new-listing","data":["test10"],"channel":"other"}'),
+            onNext(390, '{"event":"new-listing","data":["test2"],"channel":"test"}'),
+            onNext(400, '{"event":"new-listing","data":["test3"],"channel":"test"}'),
+            onCompleted(900),
+        ]);
+
+        $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
+
+        $client = new AsyncClient($webSocket);
+
+        $results1 = $this->scheduler->createObserver();
+        $results2 = $this->scheduler->createObserver();
+
+        $this->scheduler->scheduleAbsolute($this->scheduler::CREATED, function () use ($client, $results1) {
+            $client->channel('test')->subscribe($results1);
+        });
+
+        $this->scheduler->scheduleAbsolute(460, function () use ($client, $results2) {
+            $client->channel('test')->subscribe($results2);
+        });
+
+        $this->scheduler->start();
+
+        $this->assertMessages([
+            onNext(450, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(490, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
+            onNext(500, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
+            onCompleted(1002),
+        ], $results1->getMessages());
+
+        $this->assertMessages([
+            onNext(490, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
+            onNext(500, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
+            onCompleted(1002),
+        ], $results2->getMessages());
+
+        $this->assertSubscriptions([subscribe(100, 1000)], $observable->getSubscriptions());
+
+        $this->assertEquals([
+            [420, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [1002, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
+        ], $webSocket->getSentMessages());
+    }
+
     public function testPusherPing()
     {
         $observable = $this->createHotObservable([
