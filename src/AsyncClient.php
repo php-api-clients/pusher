@@ -72,11 +72,6 @@ final class AsyncClient
         $this->messages = $events
             ->merge($this->timeout($events))
             ->merge($pusherErrors)
-            ->retryWhen(function (Observable $errors) {
-                return $errors->flatMap(function (Throwable $throwable) {
-                    return $this->handleLowLevelError($throwable);
-                });
-            })
             ->singleInstance();
     }
 
@@ -131,6 +126,11 @@ final class AsyncClient
         $this->channels[$channel] = $channelMessages
             ->merge($subscribe)
             ->filter([Event::class, 'subscriptionSucceeded'])
+            ->retryWhen(function (Observable $errors) {
+                return $errors->flatMap(function (Throwable $throwable) {
+                    return $this->handleLowLevelError($throwable);
+                });
+            })
             ->finally(function () use ($channel) {
                 // Send unsubscribe event
                 $this->send(Event::unsubscribeOn($channel));

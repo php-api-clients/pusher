@@ -4,6 +4,7 @@ namespace ApiClients\Tests\Client\Pusher;
 
 use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Client\Pusher\Event;
+use ApiClients\Client\Pusher\PusherErrorException;
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\Factory;
 use RuntimeException;
@@ -34,7 +35,7 @@ final class AsyncClientTest extends TestCase
                 $capturedException = $e;
             }
         );
-        self::assertNotNull($capturedException);
+        self::assertNull($capturedException);
     }
 
     public function testConnectionRetry()
@@ -313,6 +314,92 @@ final class AsyncClientTest extends TestCase
             [570, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
             [990, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
             [1040, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
+        ], $webSocket->getSentMessages());
+    }
+
+    public function testPusherException4000NoAutoRetry()
+    {
+        $observable = $this->createColdObservable([
+            onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
+            onNext(340, '{"event":"pusher_internal:subscription_succeeded","data":"{}","channel":"test"}'),
+            onNext(350, '{"event":"new-listing","data":["test1"],"channel":"test"}'),
+            onError(370, new PusherErrorException('', 4000)),
+        ]);
+
+        $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
+
+        $results = $this->scheduler->startWithDispose(function () use ($webSocket) {
+            return (new AsyncClient($webSocket))->channel('test');
+        }, 5000);
+
+        $this->assertMessages([
+            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onError(570, new PusherErrorException('', 4000)),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([subscribe(200, 570)], $observable->getSubscriptions());
+
+        $this->assertEquals([
+            [520, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [570, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
+        ], $webSocket->getSentMessages());
+    }
+
+    public function testPusherException4100AutoRetry()
+    {
+        $observable = $this->createColdObservable([
+            onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
+            onNext(340, '{"event":"pusher_internal:subscription_succeeded","data":"{}","channel":"test"}'),
+            onNext(350, '{"event":"new-listing","data":["test1"],"channel":"test"}'),
+            onError(370, new PusherErrorException('', 4100)),
+        ]);
+
+        $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
+
+        $results = $this->scheduler->startWithDispose(function () use ($webSocket) {
+            return (new AsyncClient($webSocket))->channel('test');
+        }, 3000);
+
+        $this->assertMessages([
+            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(1921, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([subscribe(200, 570), subscribe(1571, 1941), subscribe(2942, 3000)], $observable->getSubscriptions());
+
+        $this->assertEquals([
+            [520, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [1891, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [3000, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
+        ], $webSocket->getSentMessages());
+    }
+
+    public function testPusherException4200AutoRetry()
+    {
+        $observable = $this->createColdObservable([
+            onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
+            onNext(340, '{"event":"pusher_internal:subscription_succeeded","data":"{}","channel":"test"}'),
+            onNext(350, '{"event":"new-listing","data":["test1"],"channel":"test"}'),
+            onError(370, new PusherErrorException('', 4200)),
+        ]);
+
+        $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
+
+        $results = $this->scheduler->startWithDispose(function () use ($webSocket) {
+            return (new AsyncClient($webSocket))->channel('test');
+        }, 1000);
+
+        $this->assertMessages([
+            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(921, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([subscribe(200, 570), subscribe(571, 941), subscribe(942, 1000)], $observable->getSubscriptions());
+
+        $this->assertEquals([
+            [520, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [891, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [1000, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
         ], $webSocket->getSentMessages());
     }
 }
