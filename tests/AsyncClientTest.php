@@ -402,4 +402,32 @@ final class AsyncClientTest extends TestCase
             [1000, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
         ], $webSocket->getSentMessages());
     }
+
+    public function testPusherExceptionOther()
+    {
+        $observable = $this->createColdObservable([
+            onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
+            onNext(340, '{"event":"pusher_internal:subscription_succeeded","data":"{}","channel":"test"}'),
+            onNext(350, '{"event":"new-listing","data":["test1"],"channel":"test"}'),
+            onError(370, new \Exception()),
+        ]);
+
+        $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
+
+        $results = $this->scheduler->startWithDispose(function () use ($webSocket) {
+            return (new AsyncClient($webSocket))->channel('test');
+        }, 1000);
+
+        $this->assertMessages([
+            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onError(570, new \Exception()),
+        ], $results->getMessages());
+
+        $this->assertSubscriptions([subscribe(200, 570)], $observable->getSubscriptions());
+
+        $this->assertEquals([
+            [520, '{"event":"pusher:subscribe","data":{"channel":"test"}}'],
+            [570, '{"event":"pusher:unsubscribe","data":{"channel":"test"}}'],
+        ], $webSocket->getSentMessages());
+    }
 }

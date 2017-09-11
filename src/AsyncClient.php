@@ -161,7 +161,7 @@ final class AsyncClient
      * @param  Observable $events
      * @return Observable
      */
-    public function timeout(Observable $events): Observable
+    private function timeout(Observable $events): Observable
     {
         $timeoutDuration = $this->connected->map(function (Event $event) {
             return ($event->getData()['activity_timeout'] ?? self::NO_ACTIVITY_TIMEOUT) * 1000;
