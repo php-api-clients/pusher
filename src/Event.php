@@ -2,7 +2,7 @@
 
 namespace ApiClients\Client\Pusher;
 
-final class Event
+final class Event implements \JsonSerializable
 {
     /**
      * @var string
@@ -40,6 +40,11 @@ final class Event
         );
     }
 
+    public function jsonSerialize()
+    {
+        return json_encode(['event' => $this->event, 'data' => $this->data, 'channel' => $this->channel]);
+    }
+
     /**
      * @return string
      */
@@ -62,5 +67,35 @@ final class Event
     public function getData()
     {
         return $this->data;
+    }
+
+    public static function isError(Event $event): bool
+    {
+        return $event->getEvent() === 'pusher:error';
+    }
+
+    public static function subscriptionSucceeded(Event $event): bool
+    {
+        return $event->getEvent() !== 'pusher_internal:subscription_succeeded';
+    }
+
+    public static function connectionEstablished(Event $event): bool
+    {
+        return $event->getEvent() === 'pusher:connection_established';
+    }
+
+    public static function subscribeOn(string $channel): array
+    {
+        return ['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]];
+    }
+
+    public static function unsubscribeOn(string $channel): array
+    {
+        return ['event' => 'pusher:unsubscribe', 'data' => ['channel' => $channel]];
+    }
+
+    public static function ping(): array
+    {
+        return ['event' => 'pusher:ping'];
     }
 }

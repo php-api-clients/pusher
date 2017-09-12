@@ -17,7 +17,7 @@
     "ocramius/package-versions": "^1.1",
     "react/dns": "^0.4.9",
     "react/http-client": "^0.4.17",
-    "reactivex/rxphp": "^2.0",
+    "reactivex/rxphp": "^2.0.4",
     "rx/websocket": "^1.0",
     "voryx/event-loop": "^2.0.2"
   },
@@ -31,8 +31,12 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "ApiClients\\Tests\\Client\\Pusher\\": "tests/"
-    }
+      "ApiClients\\Tests\\Client\\Pusher\\": "tests/",
+      "Rx\\": "vendor/reactivex/rxphp/test/Rx"
+    },
+    "files": [
+      "vendor/reactivex/rxphp/test/helper-functions.php"
+    ]
   },
   "config": {
     "sort-packages": true,
