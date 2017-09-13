@@ -5,6 +5,7 @@ namespace ApiClients\Client\Pusher;
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
 use Rx\DisposableInterface;
+use Rx\Observable;
 use Rx\ObserverInterface;
 use Rx\Subject\ReplaySubject;
 use Rx\Subject\Subject;
@@ -18,10 +19,22 @@ final class WebSocket extends Subject
     private $ws;
     private $sendSubject;
 
-    public function __construct(string $url, bool $useMessageObject = false, array $subProtocols = [], LoopInterface $loop = null, Resolver $dnsResolver = null)
+    /**
+     * @internal
+     * @param  Observable                $ws
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(Observable $ws)
     {
         $this->sendSubject = new ReplaySubject();
-        $this->ws = new Client($url, $useMessageObject, $subProtocols, $loop, $dnsResolver);
+        $this->ws = $ws;
+    }
+
+    public static function createFactory(string $url, bool $useMessageObject = false, array $subProtocols = [], LoopInterface $loop = null, Resolver $resolver = null): Subject
+    {
+        return new self(
+            new Client($url, $useMessageObject, $subProtocols, $loop, $resolver)
+        );
     }
 
     public function onNext($value)
@@ -32,7 +45,7 @@ final class WebSocket extends Subject
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->ws
-            ->do(function ($ms) {
+            ->do(function (Subject $ms) {
                 // Replay buffered messages onto the MessageSubject
                 $this->sendSubject->subscribe($ms);
 
@@ -43,7 +56,8 @@ final class WebSocket extends Subject
                 // The connection has closed, so start buffering messages util it reconnects.
                 $this->sendSubject = new ReplaySubject();
             })
-            ->mergeAll()
+            ->switch()
+            ->repeatDelay()
             ->subscribe($observer);
     }
 }
