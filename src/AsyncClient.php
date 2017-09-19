@@ -10,6 +10,7 @@ use Rx\Scheduler;
 use Rx\Subject\Subject;
 use Rx\Websocket\WebsocketErrorException;
 use Throwable;
+use function Rx\p;
 
 final class AsyncClient
 {
@@ -53,7 +54,7 @@ final class AsyncClient
 
         /** @var Observable $events */
         $events = $client
-            ->_ApiClients_jsonDecode()
+            ->map(p('json_decode', true))
             ->map([Event::class, 'createFromMessage'])
             ->singleInstance();
 
@@ -92,7 +93,7 @@ final class AsyncClient
         }
 
         return new self(
-            new WebSocket(ApiSettings::createUrl($app), false, [], $loop, $resolver)
+            WebSocket::createFactory(ApiSettings::createUrl($app), false, [], $loop, $resolver)
         );
     }
 

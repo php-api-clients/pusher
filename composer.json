@@ -12,12 +12,13 @@
   "require": {
     "php": "^7.0",
     "api-clients/command-bus": "^2.0",
-    "api-clients/rx-operators": "^2.0",
     "clue/block-react": "^1.1",
     "ocramius/package-versions": "^1.1",
     "react/dns": "^0.4.9",
     "react/http-client": "^0.4.17",
     "reactivex/rxphp": "^2.0.4",
+    "rx/helpers": "^1.0",
+    "rx/operator-extras": "^2.1",
     "rx/websocket": "^1.0",
     "voryx/event-loop": "^2.0.2"
   },
