@@ -65,11 +65,11 @@
     ],
     "unit": [
       "@ensure-installed",
-      "phpunit --colors=always -c phpunit.xml.dist"
+      "phpunit --colors=always -c phpunit.xml.dist -d xdebug.max_nesting_level=500"
     ],
     "unit-coverage": [
       "@ensure-installed",
-      "phpunit --colors=always -c phpunit.xml.dist --coverage-text --coverage-html covHtml --coverage-clover ./build/logs/clover.xml"
+      "phpunit --colors=always -c phpunit.xml.dist -d xdebug.max_nesting_level=500 --coverage-text --coverage-html covHtml --coverage-clover ./build/logs/clover.xml"
     ],
     "lint-php": [
       "@ensure-installed",

@@ -717,16 +717,16 @@
         },
         {
             "name": "ratchet/rfc6455",
-            "version": "v0.2.2",
+            "version": "v0.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ratchetphp/RFC6455.git",
-                "reference": "56aecde679d72d7b1087bbe1d6f7d96e123d396a"
+                "reference": "cc8a1a46a703ce01de10fdb5fab387381b66edc8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ratchetphp/RFC6455/zipball/56aecde679d72d7b1087bbe1d6f7d96e123d396a",
-                "reference": "56aecde679d72d7b1087bbe1d6f7d96e123d396a",
+                "url": "https://api.github.com/repos/ratchetphp/RFC6455/zipball/cc8a1a46a703ce01de10fdb5fab387381b66edc8",
+                "reference": "cc8a1a46a703ce01de10fdb5fab387381b66edc8",
                 "shasum": ""
             },
             "require": {
@@ -734,6 +734,7 @@
                 "php": ">=5.4.2"
             },
             "require-dev": {
+                "phpunit/phpunit": "4.8.*",
                 "react/http": "^0.4.1",
                 "react/socket-client": "^0.4.3"
             },
@@ -761,7 +762,7 @@
                 "rfc6455",
                 "websocket"
             ],
-            "time": "2017-01-01T15:41:18+00:00"
+            "time": "2017-09-13T13:49:42+00:00"
         },
         {
             "name": "react/cache",
@@ -1319,16 +1320,16 @@
         },
         {
             "name": "rx/helpers",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RxPHP/RxHelpers.git",
-                "reference": "4ad7a6960f64a7b10df4d01edf9ba663b53f669c"
+                "reference": "ade044bc8afc131b40287dc58b721526ab9277d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RxPHP/RxHelpers/zipball/4ad7a6960f64a7b10df4d01edf9ba663b53f669c",
-                "reference": "4ad7a6960f64a7b10df4d01edf9ba663b53f669c",
+                "url": "https://api.github.com/repos/RxPHP/RxHelpers/zipball/ade044bc8afc131b40287dc58b721526ab9277d6",
+                "reference": "ade044bc8afc131b40287dc58b721526ab9277d6",
                 "shasum": ""
             },
             "require": {
@@ -1364,7 +1365,7 @@
                 "rx.php",
                 "rxphp"
             ],
-            "time": "2017-09-12T01:36:53+00:00"
+            "time": "2017-09-14T01:31:18+00:00"
         },
         {
             "name": "rx/operator-extras",
