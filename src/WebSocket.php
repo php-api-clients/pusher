@@ -2,8 +2,10 @@
 
 namespace ApiClients\Client\Pusher;
 
+use PackageVersions\Versions;
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
+use React\Socket\Connector;
 use Rx\DisposableInterface;
 use Rx\Observable;
 use Rx\ObserverInterface;
@@ -32,8 +34,19 @@ final class WebSocket extends Subject
 
     public static function createFactory(string $url, bool $useMessageObject = false, array $subProtocols = [], LoopInterface $loop = null, Resolver $resolver = null): Subject
     {
+        if (Versions::getVersion('rx/websocket')[0] === '1' || $resolver === null) {
+            return new self(
+                new Client($url, $useMessageObject, $subProtocols, $loop, $resolver)
+            );
+        }
+
         return new self(
-            new Client($url, $useMessageObject, $subProtocols, $loop, $resolver)
+            new Client($url, $useMessageObject, $subProtocols, $loop, new Connector(
+                $loop,
+                [
+                    'dns' => $resolver,
+                ]
+            ))
         );
     }
 
