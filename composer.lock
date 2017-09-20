@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "eceedaddd4050d13298f9f216d68051e",
+    "content-hash": "6261c4bcb928e78f744903718f5d1bd8",
     "packages": [
         {
             "name": "api-clients/command-bus",
@@ -260,30 +260,25 @@
         },
         {
             "name": "evenement/evenement",
-            "version": "v2.1.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorw/evenement.git",
-                "reference": "6ba9a777870ab49f417e703229d53931ed40fd7a"
+                "reference": "531bfb9d15f8aa57454f5f0285b18bec903b8fb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igorw/evenement/zipball/6ba9a777870ab49f417e703229d53931ed40fd7a",
-                "reference": "6ba9a777870ab49f417e703229d53931ed40fd7a",
+                "url": "https://api.github.com/repos/igorw/evenement/zipball/531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
+                "reference": "531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.0||^5.7||^4.8.35"
+                "phpunit/phpunit": "^6.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Evenement": "src"
@@ -304,7 +299,7 @@
                 "event-dispatcher",
                 "event-emitter"
             ],
-            "time": "2017-07-17T17:39:19+00:00"
+            "time": "2017-07-23T21:35:13+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -888,27 +883,31 @@
         },
         {
             "name": "react/http",
-            "version": "v0.4.4",
+            "version": "v0.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http.git",
-                "reference": "aac319bd789cbc7b478d42cde2d03596e97e3222"
+                "reference": "6646135c01097b5316d2cb47bc12e541bf26efae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http/zipball/aac319bd789cbc7b478d42cde2d03596e97e3222",
-                "reference": "aac319bd789cbc7b478d42cde2d03596e97e3222",
+                "url": "https://api.github.com/repos/reactphp/http/zipball/6646135c01097b5316d2cb47bc12e541bf26efae",
+                "reference": "6646135c01097b5316d2cb47bc12e541bf26efae",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "^2.0 || ^1.0",
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3.0",
-                "react/socket": "^0.4",
-                "react/stream": "^0.4.4",
+                "react/promise": "^2.3 || ^1.2.1",
+                "react/socket": "^1.0 || ^0.8 || ^0.7 || ^0.6 || ^0.5",
+                "react/stream": "^1.0 || ^0.7 || ^0.6 || ^0.5 || ^0.4.6",
                 "ringcentral/psr7": "^1.2"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.10||^5.0"
+                "clue/block-react": "^1.1",
+                "phpunit/phpunit": "^4.8.10||^5.0",
+                "react/promise-stream": "^0.1.1",
+                "react/socket": "^1.0 || ^0.8 || ^0.7"
             },
             "type": "library",
             "autoload": {
@@ -920,35 +919,39 @@
             "license": [
                 "MIT"
             ],
-            "description": "Library for building an evented http server.",
+            "description": "Event-driven, streaming plaintext HTTP and secure HTTPS server for ReactPHP",
             "keywords": [
-                "http"
+                "event-driven",
+                "http",
+                "https",
+                "reactphp",
+                "server",
+                "streaming"
             ],
-            "time": "2017-02-13T14:12:50+00:00"
+            "time": "2017-08-16T15:24:39+00:00"
         },
         {
             "name": "react/http-client",
-            "version": "v0.4.17",
+            "version": "v0.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http-client.git",
-                "reference": "75ee8a113f156834aaabfe0055e8db531cb4892c"
+                "reference": "eb521c0f9de9b9780b9ced78d90314085632377f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http-client/zipball/75ee8a113f156834aaabfe0055e8db531cb4892c",
-                "reference": "75ee8a113f156834aaabfe0055e8db531cb4892c",
+                "url": "https://api.github.com/repos/reactphp/http-client/zipball/eb521c0f9de9b9780b9ced78d90314085632377f",
+                "reference": "eb521c0f9de9b9780b9ced78d90314085632377f",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "~2.0",
+                "evenement/evenement": "^3.0 || ^2.0",
                 "guzzlehttp/psr7": "^1.0",
                 "php": ">=5.4.0",
-                "react/dns": "0.4.*",
-                "react/event-loop": "0.4.*",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3",
                 "react/promise": "~2.2",
-                "react/socket-client": "^0.5 || ^0.4 || ^0.3",
-                "react/stream": "0.4.*"
+                "react/socket": "^1.0 || ^0.8.4",
+                "react/stream": "^1.0 || ^0.7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.0 || ^4.8.10"
@@ -963,11 +966,11 @@
             "license": [
                 "MIT"
             ],
-            "description": "Asynchronous HTTP client library.",
+            "description": "Event-driven, streaming HTTP client for ReactPHP",
             "keywords": [
                 "http"
             ],
-            "time": "2017-03-20T09:55:48+00:00"
+            "time": "2017-09-17T14:41:00+00:00"
         },
         {
             "name": "react/promise",
@@ -1070,29 +1073,30 @@
         },
         {
             "name": "react/socket",
-            "version": "v0.4.6",
+            "version": "v0.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "cf074e53c974df52388ebd09710a9018894745d2"
+                "reference": "ce2b577c2d69ee071c3f9e552942c320caa87e0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/cf074e53c974df52388ebd09710a9018894745d2",
-                "reference": "cf074e53c974df52388ebd09710a9018894745d2",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/ce2b577c2d69ee071c3f9e552942c320caa87e0a",
+                "reference": "ce2b577c2d69ee071c3f9e552942c320caa87e0a",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "~2.0|~1.0",
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3.0",
-                "react/event-loop": "0.4.*|0.3.*",
-                "react/promise": "^2.0 || ^1.1",
-                "react/stream": "^0.4.5"
+                "react/dns": "^0.4.11",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3.5",
+                "react/promise": "^2.1 || ^1.2",
+                "react/promise-timer": "~1.0",
+                "react/stream": "^1.0 || ^0.7.1"
             },
             "require-dev": {
                 "clue/block-react": "^1.1",
-                "phpunit/phpunit": "~4.8",
-                "react/socket-client": "^0.5.1"
+                "phpunit/phpunit": "~4.8"
             },
             "type": "library",
             "autoload": {
@@ -1104,79 +1108,41 @@
             "license": [
                 "MIT"
             ],
-            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server for React PHP",
+            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server and client connections for ReactPHP",
             "keywords": [
-                "Socket"
+                "Connection",
+                "Socket",
+                "async",
+                "reactphp",
+                "stream"
             ],
-            "time": "2017-01-26T09:23:38+00:00"
-        },
-        {
-            "name": "react/socket-client",
-            "version": "v0.5.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/socket-client.git",
-                "reference": "5570838d436f056695e9a5eaf01dd5f80386dd26"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/5570838d436f056695e9a5eaf01dd5f80386dd26",
-                "reference": "5570838d436f056695e9a5eaf01dd5f80386dd26",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0",
-                "react/dns": "0.4.*|0.3.*",
-                "react/event-loop": "0.4.*|0.3.*",
-                "react/promise": "^2.1 || ^1.2",
-                "react/promise-timer": "~1.0",
-                "react/stream": "^0.4.5"
-            },
-            "require-dev": {
-                "clue/block-react": "^1.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "React\\SocketClient\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Async connector to open TCP/IP and SSL/TLS based connections.",
-            "keywords": [
-                "Socket"
-            ],
-            "time": "2016-12-24T11:19:15+00:00"
+            "time": "2017-09-16T17:16:49+00:00"
         },
         {
             "name": "react/stream",
-            "version": "v0.4.6",
+            "version": "v0.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "44dc7f51ea48624110136b535b9ba44fd7d0c1ee"
+                "reference": "5cc7bec91dc3f6ad123a81602489b82fdb180090"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/44dc7f51ea48624110136b535b9ba44fd7d0c1ee",
-                "reference": "44dc7f51ea48624110136b535b9ba44fd7d0c1ee",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/5cc7bec91dc3f6ad123a81602489b82fdb180090",
+                "reference": "5cc7bec91dc3f6ad123a81602489b82fdb180090",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "^2.0|^1.0",
-                "php": ">=5.3.8"
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
+                "php": ">=5.3.8",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3"
             },
             "require-dev": {
                 "clue/stream-filter": "~1.2",
-                "react/event-loop": "^0.4|^0.3",
-                "react/promise": "^2.0|^1.0"
+                "phpunit/phpunit": "^5.0 || ^4.8.10"
             },
             "suggest": {
-                "react/event-loop": "^0.4",
-                "react/promise": "^2.0"
+                "react/event-loop": "^0.4"
             },
             "type": "library",
             "autoload": {
@@ -1188,12 +1154,18 @@
             "license": [
                 "MIT"
             ],
-            "description": "Basic readable and writable stream interfaces that support piping.",
+            "description": "Event-driven readable and writable streams for non-blocking I/O in ReactPHP",
             "keywords": [
+                "event-driven",
+                "io",
+                "non-blocking",
                 "pipe",
-                "stream"
+                "reactphp",
+                "readable",
+                "stream",
+                "writable"
             ],
-            "time": "2017-01-25T14:44:14+00:00"
+            "time": "2017-08-05T09:16:09+00:00"
         },
         {
             "name": "reactivex/rxphp",
@@ -1420,22 +1392,22 @@
         },
         {
             "name": "rx/websocket",
-            "version": "1.0.2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RxPHP/RxWebsocket.git",
-                "reference": "d87f61cde555de16e34847bf9aeba28200fe08eb"
+                "reference": "94a9243af22e562449cc52e1601eb15677ad2360"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/d87f61cde555de16e34847bf9aeba28200fe08eb",
-                "reference": "d87f61cde555de16e34847bf9aeba28200fe08eb",
+                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/94a9243af22e562449cc52e1601eb15677ad2360",
+                "reference": "94a9243af22e562449cc52e1601eb15677ad2360",
                 "shasum": ""
             },
             "require": {
                 "ratchet/rfc6455": "^0.2.2",
-                "react/http": "^0.4.1",
-                "react/http-client": "^0.4.10",
+                "react/http": "^0.7.3",
+                "react/http-client": "^0.5.3",
                 "reactivex/rxphp": "^2.0",
                 "voryx/event-loop": "^2.0"
             },
@@ -1475,7 +1447,7 @@
                 "rxphp",
                 "websocket"
             ],
-            "time": "2017-08-17T02:29:36+00:00"
+            "time": "2017-09-12T19:55:53+00:00"
         },
         {
             "name": "voryx/event-loop",
