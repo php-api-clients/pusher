@@ -83,7 +83,7 @@ final class AsyncClient
      * @throws \InvalidArgumentException
      * @return AsyncClient
      */
-    public static function create(LoopInterface $loop, string $app, Resolver $resolver = null): AsyncClient
+    public static function create(LoopInterface $loop, string $app, Resolver $resolver = null, $cluster = null): AsyncClient
     {
         try {
             Scheduler::setDefaultFactory(function () use ($loop) {
@@ -93,7 +93,7 @@ final class AsyncClient
         }
 
         return new self(
-            WebSocket::createFactory(ApiSettings::createUrl($app), false, [], $loop, $resolver)
+            WebSocket::createFactory(ApiSettings::createUrl($app, $cluster), false, [], $loop, $resolver)
         );
     }
 

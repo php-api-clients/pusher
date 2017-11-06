@@ -33,7 +33,7 @@ final class ApiSettings
      * @param  string $appId
      * @return string
      */
-    public static function createUrl(string $appId): string
+    public static function createUrl(string $appId, string $cluster = null): string
     {
         $query = [
             'client' => 'api-clients/pusher (https://php-api-clients.org/clients/pusher)',
@@ -41,7 +41,9 @@ final class ApiSettings
             'version' => ApiSettings::getVersion(),
         ];
 
-        return 'wss://ws.pusherapp.com/app/' .
+        $host = ($cluster) ? "ws-{$cluster}.pusher.com" : 'ws.pusherapp.com';
+
+        return 'wss://'.$host.'/app/' .
             $appId .
             '?' . http_build_query($query)
         ;
