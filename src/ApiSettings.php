@@ -41,7 +41,7 @@ final class ApiSettings
             'version' => ApiSettings::getVersion(),
         ];
 
-        $host = ($cluster) ? "ws-{$cluster}.pusher.com" : 'ws.pusherapp.com';
+        $host = ($cluster !== null) ? "ws-{$cluster}.pusher.com" : 'ws.pusherapp.com';
 
         return 'wss://'.$host.'/app/' .
             $appId .

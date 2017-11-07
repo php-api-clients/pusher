@@ -83,8 +83,12 @@ final class AsyncClient
      * @throws \InvalidArgumentException
      * @return AsyncClient
      */
-    public static function create(LoopInterface $loop, string $app, Resolver $resolver = null, $cluster = null): AsyncClient
-    {
+    public static function create(
+        LoopInterface $loop,
+        string $app,
+        Resolver $resolver = null,
+        string $cluster = null
+    ): AsyncClient {
         try {
             Scheduler::setDefaultFactory(function () use ($loop) {
                 return new Scheduler\EventLoopScheduler($loop);
