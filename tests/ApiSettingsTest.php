@@ -43,5 +43,9 @@ final class ApiSettingsTest extends TestCase
         $expectedUrl = 'wss://ws.pusherapp.com/app/barBaz?client=api-clients%2Fpusher+%28https%3A%2F%2Fphp-api-clients.org%2Fclients%2Fpusher%29&protocol=7&version=' . ApiSettings::getVersion();
 
         self::assertSame($expectedUrl, ApiSettings::createUrl('barBaz'));
+
+        $expectedUrl = 'wss://ws-ap1.pusher.com/app/barBaz?client=api-clients%2Fpusher+%28https%3A%2F%2Fphp-api-clients.org%2Fclients%2Fpusher%29&protocol=7&version=' . ApiSettings::getVersion();
+
+        self::assertSame($expectedUrl, ApiSettings::createUrl('barBaz','ap1'));
     }
 }
