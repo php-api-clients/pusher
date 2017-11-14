@@ -2,7 +2,7 @@
 
 namespace ApiClients\Client\Pusher;
 
-use PackageVersions\Versions;
+use Jean85\PrettyVersions;
 
 final class ApiSettings
 {
@@ -15,7 +15,7 @@ final class ApiSettings
     public static function getVersion(string $version = ''): string
     {
         if ($version === '') {
-            $version = Versions::getVersion('api-clients/pusher');
+            $version = PrettyVersions::getVersion('api-clients/pusher')->getFullVersion();
         }
 
         list($version, $hash) = explode('@', $version);
