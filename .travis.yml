@@ -12,6 +12,7 @@ matrix:
       env:
         - qaExtended=true
     - php: 7.1
+    - php: 7.2
     - php: nightly
       env:
         - dropPlatform=false
