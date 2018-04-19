@@ -20,7 +20,7 @@
     "rx/helpers": "^1.0",
     "rx/operator-extras": "^2.1",
     "rx/websocket": "^2.0 || ^1.0",
-    "voryx/event-loop": "^2.0.2"
+    "voryx/event-loop": "^3.0 || ^2.0.2"
   },
   "require-dev": {
     "api-clients/test-utilities": "^4.1"
