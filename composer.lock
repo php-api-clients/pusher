@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "6261c4bcb928e78f744903718f5d1bd8",
+    "content-hash": "c0e6b3857a9c9fb8534f67629ec494bc",
     "packages": [
         {
             "name": "api-clients/command-bus",
@@ -1392,24 +1392,24 @@
         },
         {
             "name": "rx/websocket",
-            "version": "2.0.0",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RxPHP/RxWebsocket.git",
-                "reference": "94a9243af22e562449cc52e1601eb15677ad2360"
+                "reference": "2f6725a0c45eb8f5f0412f402b0539d53e9f0f05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/94a9243af22e562449cc52e1601eb15677ad2360",
-                "reference": "94a9243af22e562449cc52e1601eb15677ad2360",
+                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/2f6725a0c45eb8f5f0412f402b0539d53e9f0f05",
+                "reference": "2f6725a0c45eb8f5f0412f402b0539d53e9f0f05",
                 "shasum": ""
             },
             "require": {
                 "ratchet/rfc6455": "^0.2.2",
-                "react/http": "^0.7.3",
+                "react/http": "^0.7.3 | ^0.8",
                 "react/http-client": "^0.5.3",
-                "reactivex/rxphp": "^2.0",
-                "voryx/event-loop": "^2.0"
+                "reactivex/rxphp": "^2.0.1",
+                "voryx/event-loop": "^2.0.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "~5.7.0"
@@ -1447,7 +1447,7 @@
                 "rxphp",
                 "websocket"
             ],
-            "time": "2017-09-12T19:55:53+00:00"
+            "time": "2017-12-15T14:51:21+00:00"
         },
         {
             "name": "voryx/event-loop",

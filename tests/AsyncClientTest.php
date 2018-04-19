@@ -49,7 +49,10 @@ final class AsyncClientTest extends TestCase
         });
         $loop->addTimer(1, function () {
         });
-        $loop->tick();
+        $loop->futureTick(function () use ($loop) {
+            $loop->stop();
+        });
+        $loop->run();
     }
 
     public function testWebSocketNever()
