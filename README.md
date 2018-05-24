@@ -20,6 +20,8 @@ composer require api-clients/pusher
 ```php
 $loop = Factory::create();
 $client = AsyncClient::create($loop, 'Application ID here');
+// OR when you need to specify the cluster
+$client = AsyncClient::create($loop, 'Application ID here', null, 'cluster-here');
 
 $client->channel('channel_name')->subscribe(
     function (Event $event) { // Gets called for each incoming event
