@@ -763,16 +763,16 @@
         },
         {
             "name": "ratchet/rfc6455",
-            "version": "v0.2.3",
+            "version": "0.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ratchetphp/RFC6455.git",
-                "reference": "cc8a1a46a703ce01de10fdb5fab387381b66edc8"
+                "reference": "1612f528c3496ad06e910d0f8b6f16ab97696706"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ratchetphp/RFC6455/zipball/cc8a1a46a703ce01de10fdb5fab387381b66edc8",
-                "reference": "cc8a1a46a703ce01de10fdb5fab387381b66edc8",
+                "url": "https://api.github.com/repos/ratchetphp/RFC6455/zipball/1612f528c3496ad06e910d0f8b6f16ab97696706",
+                "reference": "1612f528c3496ad06e910d0f8b6f16ab97696706",
                 "shasum": ""
             },
             "require": {
@@ -808,7 +808,7 @@
                 "rfc6455",
                 "websocket"
             ],
-            "time": "2017-09-13T13:49:42+00:00"
+            "time": "2018-05-02T14:52:00+00:00"
         },
         {
             "name": "react/cache",
@@ -934,31 +934,30 @@
         },
         {
             "name": "react/http",
-            "version": "v0.7.4",
+            "version": "v0.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/http.git",
-                "reference": "6646135c01097b5316d2cb47bc12e541bf26efae"
+                "reference": "f8bcdab2dc0ecd94f35ff9657a263028b96f0c46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/http/zipball/6646135c01097b5316d2cb47bc12e541bf26efae",
-                "reference": "6646135c01097b5316d2cb47bc12e541bf26efae",
+                "url": "https://api.github.com/repos/reactphp/http/zipball/f8bcdab2dc0ecd94f35ff9657a263028b96f0c46",
+                "reference": "f8bcdab2dc0ecd94f35ff9657a263028b96f0c46",
                 "shasum": ""
             },
             "require": {
                 "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3.0",
                 "react/promise": "^2.3 || ^1.2.1",
-                "react/socket": "^1.0 || ^0.8 || ^0.7 || ^0.6 || ^0.5",
-                "react/stream": "^1.0 || ^0.7 || ^0.6 || ^0.5 || ^0.4.6",
+                "react/promise-stream": "^1.1",
+                "react/socket": "^1.0 || ^0.8.3",
+                "react/stream": "^1.0 || ^0.7.1",
                 "ringcentral/psr7": "^1.2"
             },
             "require-dev": {
                 "clue/block-react": "^1.1",
-                "phpunit/phpunit": "^4.8.10||^5.0",
-                "react/promise-stream": "^0.1.1",
-                "react/socket": "^1.0 || ^0.8 || ^0.7"
+                "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
             },
             "type": "library",
             "autoload": {
@@ -979,7 +978,7 @@
                 "server",
                 "streaming"
             ],
-            "time": "2017-08-16T15:24:39+00:00"
+            "time": "2018-04-11T15:03:27+00:00"
         },
         {
             "name": "react/http-client",
@@ -1070,6 +1069,62 @@
                 "promises"
             ],
             "time": "2018-06-13T15:59:06+00:00"
+        },
+        {
+            "name": "react/promise-stream",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/reactphp/promise-stream.git",
+                "reference": "00e269d611e9c9a29356aef64c07f7e513e73dc9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/reactphp/promise-stream/zipball/00e269d611e9c9a29356aef64c07f7e513e73dc9",
+                "reference": "00e269d611e9c9a29356aef64c07f7e513e73dc9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3",
+                "react/promise": "^2.1 || ^1.2",
+                "react/stream": "^1.0 || ^0.7 || ^0.6 || ^0.5 || ^0.4 || ^0.3"
+            },
+            "require-dev": {
+                "clue/block-react": "^1.0",
+                "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3",
+                "react/promise-timer": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "React\\Promise\\Stream\\": "src/"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@lueck.tv"
+                }
+            ],
+            "description": "The missing link between Promise-land and Stream-land for ReactPHP",
+            "homepage": "https://github.com/reactphp/promise-stream",
+            "keywords": [
+                "Buffer",
+                "async",
+                "promise",
+                "reactphp",
+                "stream",
+                "unwrap"
+            ],
+            "time": "2017-12-22T12:02:05+00:00"
         },
         {
             "name": "react/promise-timer",
@@ -1284,16 +1339,16 @@
         },
         {
             "name": "ringcentral/psr7",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ringcentral/psr7.git",
-                "reference": "2594fb47cdc659f3fcf0aa1559b7355460555303"
+                "reference": "dcd84bbb49b96c616d1dcc8bfb9bef3f2cd53d1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ringcentral/psr7/zipball/2594fb47cdc659f3fcf0aa1559b7355460555303",
-                "reference": "2594fb47cdc659f3fcf0aa1559b7355460555303",
+                "url": "https://api.github.com/repos/ringcentral/psr7/zipball/dcd84bbb49b96c616d1dcc8bfb9bef3f2cd53d1c",
+                "reference": "dcd84bbb49b96c616d1dcc8bfb9bef3f2cd53d1c",
                 "shasum": ""
             },
             "require": {
@@ -1338,7 +1393,7 @@
                 "stream",
                 "uri"
             ],
-            "time": "2016-03-25T17:36:49+00:00"
+            "time": "2018-01-15T21:00:49+00:00"
         },
         {
             "name": "rx/helpers",
@@ -1442,16 +1497,16 @@
         },
         {
             "name": "rx/websocket",
-            "version": "2.1.2",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RxPHP/RxWebsocket.git",
-                "reference": "2f6725a0c45eb8f5f0412f402b0539d53e9f0f05"
+                "reference": "920a8a0caf8dd98ddb625abe2298aac4f427bc91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/2f6725a0c45eb8f5f0412f402b0539d53e9f0f05",
-                "reference": "2f6725a0c45eb8f5f0412f402b0539d53e9f0f05",
+                "url": "https://api.github.com/repos/RxPHP/RxWebsocket/zipball/920a8a0caf8dd98ddb625abe2298aac4f427bc91",
+                "reference": "920a8a0caf8dd98ddb625abe2298aac4f427bc91",
                 "shasum": ""
             },
             "require": {
@@ -1459,7 +1514,7 @@
                 "react/http": "^0.7.3 | ^0.8",
                 "react/http-client": "^0.5.3",
                 "reactivex/rxphp": "^2.0.1",
-                "voryx/event-loop": "^2.0.2"
+                "voryx/event-loop": "^3.0 || ^2.0.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "~5.7.0"
@@ -1497,7 +1552,7 @@
                 "rxphp",
                 "websocket"
             ],
-            "time": "2017-12-15T14:51:21+00:00"
+            "time": "2018-04-18T10:30:56+00:00"
         },
         {
             "name": "voryx/event-loop",
