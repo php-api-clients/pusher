@@ -56,16 +56,16 @@
         },
         {
             "name": "clue/block-react",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/reactphp-block.git",
-                "reference": "a4a5cd64ded3b15affa168a2419fa4eda08b96aa"
+                "reference": "2f516b28259c203d67c4c963772dd7e9db652737"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/reactphp-block/zipball/a4a5cd64ded3b15affa168a2419fa4eda08b96aa",
-                "reference": "a4a5cd64ded3b15affa168a2419fa4eda08b96aa",
+                "url": "https://api.github.com/repos/clue/reactphp-block/zipball/2f516b28259c203d67c4c963772dd7e9db652737",
+                "reference": "2f516b28259c203d67c4c963772dd7e9db652737",
                 "shasum": ""
             },
             "require": {
@@ -80,7 +80,7 @@
             "type": "library",
             "autoload": {
                 "files": [
-                    "src/functions.php"
+                    "src/functions_include.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -105,7 +105,7 @@
                 "sleep",
                 "synchronous"
             ],
-            "time": "2018-06-14T08:50:53+00:00"
+            "time": "2019-04-09T11:45:04+00:00"
         },
         {
             "name": "container-interop/container-interop",
