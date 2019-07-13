@@ -25,7 +25,7 @@ class TestWebSocketSubject extends Subject
         return $this->sentMessages;
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         $this->sentMessages[] = [$this->scheduler->getClock(), $value];
     }

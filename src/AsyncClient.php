@@ -6,11 +6,11 @@ use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
 use RuntimeException;
 use Rx\Observable;
+use function Rx\p;
 use Rx\Scheduler;
 use Rx\Subject\Subject;
 use Rx\Websocket\WebsocketErrorException;
 use Throwable;
-use function Rx\p;
 
 final class AsyncClient
 {
@@ -121,7 +121,7 @@ final class AsyncClient
         });
 
         $subscribe = $this->connected
-            ->do(function () use ($channel) {
+            ->do(function () use ($channel): void {
                 // Subscribe to pusher channel after connected
                 $this->send(Event::subscribeOn($channel));
             })
@@ -136,7 +136,7 @@ final class AsyncClient
                     return $this->handleLowLevelError($throwable);
                 });
             })
-            ->finally(function () use ($channel) {
+            ->finally(function () use ($channel): void {
                 // Send unsubscribe event
                 $this->send(Event::unsubscribeOn($channel));
 
@@ -154,9 +154,9 @@ final class AsyncClient
      * @param array $message Message to send, will be json encoded
      *
      */
-    public function send(array $message)
+    public function send(array $message): void
     {
-        $this->client->onNext(json_encode($message));
+        $this->client->onNext(\json_encode($message));
     }
 
     /**

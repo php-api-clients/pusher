@@ -5,23 +5,29 @@ namespace ApiClients\Tests\Client\Pusher;
 use ApiClients\Client\Pusher\AsyncClient;
 use ApiClients\Client\Pusher\Event;
 use ApiClients\Client\Pusher\PusherErrorException;
+use Prophecy\Argument;
+use React\Dns\Query\ExecutorInterface;
+use React\Dns\Query\Query;
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\Factory;
+use function React\Promise\reject;
 use RuntimeException;
 use Rx\Exception\TimeoutException;
 use Rx\Observable;
-use function React\Promise\reject;
 
+/**
+ * @internal
+ */
 final class AsyncClientTest extends TestCase
 {
-    public function testCreateFactory()
+    public function testCreateFactory(): void
     {
         $loop = Factory::create();
-        $appId = uniqid('app-id-', true);
+        $appId = \uniqid('app-id-', true);
         self::assertInstanceOf(AsyncClient::class, AsyncClient::create($loop, $appId));
     }
 
-    public function testConnectionError()
+    public function testConnectionError(): void
     {
         $capturedException = null;
         $error = new RuntimeException();
@@ -29,33 +35,37 @@ final class AsyncClientTest extends TestCase
         $webSocket = new TestWebSocketSubject($observable, $this->scheduler);
         $client = new AsyncClient($webSocket);
         $client->channel('test')->subscribe(
-            function () {
+            function (): void {
             },
-            function ($e) use (&$capturedException) {
+            function ($e) use (&$capturedException): void {
                 $capturedException = $e;
             }
         );
         self::assertNull($capturedException);
     }
 
-    public function testConnectionRetry()
+    public function testConnectionRetry(): void
     {
         $loop = Factory::create();
         $error = new RuntimeException('', 4199);
-        $resolver = $this->prophesize(Resolver::class);
-        $resolver->resolve('ws.pusherapp.com')->shouldBeCalled()->willReturn(reject($error));
-        $client = AsyncClient::create($loop, 'abc', $resolver->reveal());
-        $client->channel('test')->subscribe(null, function ($e) {
+        $executioner = $this->prophesize(ExecutorInterface::class);
+        $executioner->query(Argument::that(function (Query $query) {
+            self::assertSame('ws.pusherapp.com', $query->name);
+
+            return true;
+        }))->shouldBeCalled()->willReturn(reject($error));
+        $client = AsyncClient::create($loop, 'abc', new Resolver($executioner->reveal()));
+        $client->channel('test')->subscribe(null, function ($e): void {
         });
-        $loop->addTimer(1, function () {
+        $loop->addTimer(1, function (): void {
         });
-        $loop->futureTick(function () use ($loop) {
+        $loop->futureTick(function () use ($loop): void {
             $loop->stop();
         });
         $loop->run();
     }
 
-    public function testWebSocketNever()
+    public function testWebSocketNever(): void
     {
         $webSocket = new TestWebSocketSubject(Observable::never(), $this->scheduler);
 
@@ -66,7 +76,7 @@ final class AsyncClientTest extends TestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testWebSocketEmpty()
+    public function testWebSocketEmpty(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -86,7 +96,7 @@ final class AsyncClientTest extends TestCase
         $this->assertSubscriptions([subscribe(200, 235)], $observable->getSubscriptions());
     }
 
-    public function testWebSocketDispose()
+    public function testWebSocketDispose(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -104,7 +114,7 @@ final class AsyncClientTest extends TestCase
         $this->assertSubscriptions([subscribe(200, 300)], $observable->getSubscriptions());
     }
 
-    public function testPusherConnection()
+    public function testPusherConnection(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -128,7 +138,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherSubscribed()
+    public function testPusherSubscribed(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -153,7 +163,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherData()
+    public function testPusherData(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -173,9 +183,9 @@ final class AsyncClientTest extends TestCase
         });
 
         $this->assertMessages([
-            onNext(350, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
-            onNext(390, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
-            onNext(400, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
+            onNext(350, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(390, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
+            onNext(400, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
             onCompleted(902),
         ], $results->getMessages());
 
@@ -187,7 +197,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherDataSameChannel()
+    public function testPusherDataSameChannel(): void
     {
         $observable = $this->createColdObservable([
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
@@ -206,26 +216,26 @@ final class AsyncClientTest extends TestCase
         $results1 = $this->scheduler->createObserver();
         $results2 = $this->scheduler->createObserver();
 
-        $this->scheduler->scheduleAbsolute($this->scheduler::CREATED, function () use ($client, $results1) {
+        $this->scheduler->scheduleAbsolute($this->scheduler::CREATED, function () use ($client, $results1): void {
             $client->channel('test')->subscribe($results1);
         });
 
-        $this->scheduler->scheduleAbsolute(460, function () use ($client, $results2) {
+        $this->scheduler->scheduleAbsolute(460, function () use ($client, $results2): void {
             $client->channel('test')->subscribe($results2);
         });
 
         $this->scheduler->start();
 
         $this->assertMessages([
-            onNext(450, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
-            onNext(490, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
-            onNext(500, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
+            onNext(450, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(490, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
+            onNext(500, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
             onCompleted(1002),
         ], $results1->getMessages());
 
         $this->assertMessages([
-            onNext(490, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
-            onNext(500, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
+            onNext(490, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test2"],"channel":"test"}', true))),
+            onNext(500, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test3"],"channel":"test"}', true))),
             onCompleted(1002),
         ], $results2->getMessages());
 
@@ -237,7 +247,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherPing()
+    public function testPusherPing(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -261,7 +271,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherTimeout()
+    public function testPusherTimeout(): void
     {
         $observable = $this->createHotObservable([
             onNext(150, 1),
@@ -285,7 +295,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherReconnectInnerError()
+    public function testPusherReconnectInnerError(): void
     {
         $observable = $this->createColdObservable([
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
@@ -305,8 +315,8 @@ final class AsyncClientTest extends TestCase
         }, 5000);
 
         $this->assertMessages([
-            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
-            onNext(1020, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(550, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(1020, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
             onCompleted(1040),
         ], $results->getMessages());
 
@@ -320,7 +330,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherException4000NoAutoRetry()
+    public function testPusherException4000NoAutoRetry(): void
     {
         $observable = $this->createColdObservable([
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
@@ -336,7 +346,7 @@ final class AsyncClientTest extends TestCase
         }, 5000);
 
         $this->assertMessages([
-            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(550, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
             onError(570, new PusherErrorException('', 4000)),
         ], $results->getMessages());
 
@@ -348,7 +358,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherException4100AutoRetry()
+    public function testPusherException4100AutoRetry(): void
     {
         $observable = $this->createColdObservable([
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
@@ -364,8 +374,8 @@ final class AsyncClientTest extends TestCase
         }, 3000);
 
         $this->assertMessages([
-            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
-            onNext(1921, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(550, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(1921, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 570), subscribe(1571, 1941), subscribe(2942, 3000)], $observable->getSubscriptions());
@@ -377,7 +387,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherException4200AutoRetry()
+    public function testPusherException4200AutoRetry(): void
     {
         $observable = $this->createColdObservable([
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
@@ -393,8 +403,8 @@ final class AsyncClientTest extends TestCase
         }, 1000);
 
         $this->assertMessages([
-            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
-            onNext(921, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(550, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(921, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
         ], $results->getMessages());
 
         $this->assertSubscriptions([subscribe(200, 570), subscribe(571, 941), subscribe(942, 1000)], $observable->getSubscriptions());
@@ -406,7 +416,7 @@ final class AsyncClientTest extends TestCase
         ], $webSocket->getSentMessages());
     }
 
-    public function testPusherExceptionOther()
+    public function testPusherExceptionOther(): void
     {
         $observable = $this->createColdObservable([
             onNext(320, '{"event":"pusher:connection_established","data":"{\"socket_id\":\"218656.9503498\",\"activity_timeout\":120}"}'),
@@ -422,7 +432,7 @@ final class AsyncClientTest extends TestCase
         }, 1000);
 
         $this->assertMessages([
-            onNext(550, Event::createFromMessage(json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
+            onNext(550, Event::createFromMessage(\json_decode('{"event":"new-listing","data":["test1"],"channel":"test"}', true))),
             onError(570, new \Exception()),
         ], $results->getMessages());
 

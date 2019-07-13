@@ -18,9 +18,9 @@ final class ApiSettings
             $version = PrettyVersions::getVersion('api-clients/pusher')->getFullVersion();
         }
 
-        list($version, $hash) = explode('@', $version);
+        list($version, $hash) = \explode('@', $version);
 
-        if (strpos($version, 'dev') !== false) {
+        if (\strpos($version, 'dev') !== false) {
             return '0.0.1-' . $hash;
         }
 
@@ -45,7 +45,7 @@ final class ApiSettings
 
         return 'wss://'.$host.'/app/' .
             $appId .
-            '?' . http_build_query($query)
+            '?' . \http_build_query($query)
         ;
     }
 }

@@ -2,22 +2,22 @@
 
 namespace ApiClients\Client\Pusher;
 
+use function Clue\React\Block\await;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use Rx\Observable;
-use function Clue\React\Block\await;
 
 final class Client
 {
     /**
      * @var LoopInterface
      */
-    protected $loop;
+    private $loop;
 
     /**
      * @var AsyncClient
      */
-    protected $client;
+    private $client;
 
     /**
      * @param string $app Application ID
@@ -32,7 +32,7 @@ final class Client
      * @param string   $channel  Channel to listen on
      * @param callable $listener Listener to call on new messages
      */
-    public function channel(string $channel, callable $listener)
+    public function channel(string $channel, callable $listener): void
     {
         $this->channels([$channel], $listener);
     }
@@ -41,7 +41,7 @@ final class Client
      * @param string[] $channels Channels to listen on
      * @param callable $listener Listener to call on new messages
      */
-    public function channels(array $channels, callable $listener)
+    public function channels(array $channels, callable $listener): void
     {
         $promise = Observable::fromArray($channels)
             ->flatMap([$this->client, 'channel'])

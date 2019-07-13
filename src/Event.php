@@ -35,14 +35,14 @@ final class Event implements \JsonSerializable
     {
         return new self(
             $message['event'],
-            is_array($message['data']) ? $message['data'] : json_decode($message['data'], true),
-            isset($message['channel']) ? $message['channel'] : ''
+            \is_array($message['data']) ? $message['data'] : \json_decode($message['data'], true),
+            $message['channel'] ?? ''
         );
     }
 
     public function jsonSerialize()
     {
-        return json_encode(['event' => $this->event, 'data' => $this->data, 'channel' => $this->channel]);
+        return \json_encode(['event' => $this->event, 'data' => $this->data, 'channel' => $this->channel]);
     }
 
     /**

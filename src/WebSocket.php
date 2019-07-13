@@ -50,7 +50,7 @@ final class WebSocket extends Subject
         );
     }
 
-    public function onNext($value)
+    public function onNext($value): void
     {
         $this->sendSubject->onNext($value);
     }
@@ -58,14 +58,14 @@ final class WebSocket extends Subject
     protected function _subscribe(ObserverInterface $observer): DisposableInterface
     {
         return $this->ws
-            ->do(function (Subject $ms) {
+            ->do(function (Subject $ms): void {
                 // Replay buffered messages onto the MessageSubject
                 $this->sendSubject->subscribe($ms);
 
                 // Now that the connection has been established, use the message subject directly.
                 $this->sendSubject = $ms;
             })
-            ->finally(function () {
+            ->finally(function (): void {
                 // The connection has closed, so start buffering messages util it reconnects.
                 $this->sendSubject = new ReplaySubject();
             })

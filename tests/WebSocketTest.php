@@ -6,9 +6,12 @@ use ApiClients\Client\Pusher\WebSocket;
 use Rx\Subject\Subject;
 use Rx\Testing\MockObserver;
 
+/**
+ * @internal
+ */
 final class WebSocketTest extends TestCase
 {
-    public function testWebSocketNever()
+    public function testWebSocketNever(): void
     {
         $ws = $this->createHotObservable([
             onNext(150, 1),
@@ -21,7 +24,7 @@ final class WebSocketTest extends TestCase
         $this->assertMessages([], $results->getMessages());
     }
 
-    public function testWebSocketEmpty()
+    public function testWebSocketEmpty(): void
     {
         $ws = $this->createHotObservable([
             onNext(150, 1),
@@ -37,7 +40,7 @@ final class WebSocketTest extends TestCase
         $this->assertSubscriptions([subscribe(200, 235)], $ws->getSubscriptions());
     }
 
-    public function testWebSocketDispose()
+    public function testWebSocketDispose(): void
     {
         $ws = $this->createHotObservable([
             onNext(150, 1),
@@ -53,7 +56,7 @@ final class WebSocketTest extends TestCase
         $this->assertSubscriptions([subscribe(200, 300)], $ws->getSubscriptions());
     }
 
-    public function testWebSocketReconnect()
+    public function testWebSocketReconnect(): void
     {
         $ws = $this->createHotObservable([
             onNext(150, 1),
@@ -69,7 +72,7 @@ final class WebSocketTest extends TestCase
         $this->assertSubscriptions([subscribe(200, 435), subscribe(1935, 2000)], $ws->getSubscriptions());
     }
 
-    public function testWebSocketSingleValue()
+    public function testWebSocketSingleValue(): void
     {
         $messageSubject = new Subject();
 
@@ -79,7 +82,7 @@ final class WebSocketTest extends TestCase
             onCompleted(435),
         ]);
 
-        $this->scheduler->scheduleAbsolute(230, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(230, function () use ($messageSubject): void {
             $messageSubject->onNext(2);
         });
 
@@ -94,7 +97,7 @@ final class WebSocketTest extends TestCase
         $this->assertFalse($messageSubject->hasObservers());
     }
 
-    public function testWebSocketMultipleValues()
+    public function testWebSocketMultipleValues(): void
     {
         $messageSubject = new Subject();
 
@@ -104,15 +107,15 @@ final class WebSocketTest extends TestCase
             onCompleted(435),
         ]);
 
-        $this->scheduler->scheduleAbsolute(230, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(230, function () use ($messageSubject): void {
             $messageSubject->onNext(2);
         });
 
-        $this->scheduler->scheduleAbsolute(235, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(235, function () use ($messageSubject): void {
             $messageSubject->onNext(3);
         });
 
-        $this->scheduler->scheduleAbsolute(240, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(240, function () use ($messageSubject): void {
             $messageSubject->onNext(4);
         });
 
@@ -131,7 +134,7 @@ final class WebSocketTest extends TestCase
         $this->assertFalse($messageSubject->hasObservers());
     }
 
-    public function testWebSocketMultipleValuesReconnect()
+    public function testWebSocketMultipleValuesReconnect(): void
     {
         $messageSubject = new Subject();
 
@@ -141,15 +144,15 @@ final class WebSocketTest extends TestCase
             onCompleted(435),
         ]);
 
-        $this->scheduler->scheduleAbsolute(230, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(230, function () use ($messageSubject): void {
             $messageSubject->onNext(2);
         });
 
-        $this->scheduler->scheduleAbsolute(1945, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(1945, function () use ($messageSubject): void {
             $messageSubject->onNext(3);
         });
 
-        $this->scheduler->scheduleAbsolute(3695, function () use ($messageSubject) {
+        $this->scheduler->scheduleAbsolute(3695, function () use ($messageSubject): void {
             $messageSubject->onNext(4);
         });
 
@@ -168,7 +171,7 @@ final class WebSocketTest extends TestCase
         $this->assertFalse($messageSubject->hasObservers());
     }
 
-    public function testWebSocketOnNextBeforeConnected()
+    public function testWebSocketOnNextBeforeConnected(): void
     {
         $messageSubject = new Subject();
 
@@ -185,7 +188,7 @@ final class WebSocketTest extends TestCase
 
         $messageSubject->subscribe($results);
 
-        $this->scheduler->scheduleAbsolute(200, function () use ($websocket) {
+        $this->scheduler->scheduleAbsolute(200, function () use ($websocket): void {
             $websocket->onNext('test');
         });
 
@@ -196,7 +199,7 @@ final class WebSocketTest extends TestCase
         ], $results->getMessages());
     }
 
-    public function testWebSocketOnNextAfterConnected()
+    public function testWebSocketOnNextAfterConnected(): void
     {
         $messageSubject = new Subject();
 
@@ -213,7 +216,7 @@ final class WebSocketTest extends TestCase
 
         $messageSubject->subscribe($results);
 
-        $this->scheduler->scheduleAbsolute(210, function () use ($websocket) {
+        $this->scheduler->scheduleAbsolute(210, function () use ($websocket): void {
             $websocket->onNext('test');
         });
 

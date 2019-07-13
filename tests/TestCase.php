@@ -2,14 +2,28 @@
 
 namespace ApiClients\Tests\Client\Pusher;
 
-use Rx\Functional\FunctionalTestCase;
+use ApiClients\Tools\TestUtilities\TestCase as TestUtilitiesTestCase;
 use Rx\Scheduler;
+use Rx\Testing\ColdObservable;
+use Rx\Testing\HotObservable;
+use Rx\Testing\Recorded;
+use Rx\Testing\TestScheduler;
 
-class TestCase extends FunctionalTestCase
+/**
+ * @internal
+ */
+class TestCase extends TestUtilitiesTestCase
 {
-    public function setup()
+    /**
+     * @var TestScheduler
+     */
+    protected $scheduler;
+
+    protected function setup(): void
     {
         parent::setup();
+
+        $this->scheduler = $this->createTestScheduler();
 
         self::resetScheduler();
 
@@ -18,7 +32,7 @@ class TestCase extends FunctionalTestCase
         });
     }
 
-    public static function resetScheduler()
+    public static function resetScheduler(): void
     {
         $ref = new \ReflectionClass(Scheduler::class);
         $props = $ref->getProperties();
@@ -28,5 +42,54 @@ class TestCase extends FunctionalTestCase
             $prop->setValue(null);
             $prop->setAccessible(false);
         }
+    }
+
+    /**
+     * @param Recorded[] $expected
+     * @param Recorded[] $recorded
+     */
+    public function assertMessages(array $expected, array $recorded): void
+    {
+        if (\count($expected) !== \count($recorded)) {
+            $this->fail(\sprintf('Expected message count %d does not match actual count %d.', \count($expected), \count($recorded)));
+        }
+
+        for ($i = 0, $count = \count($expected); $i < $count; $i++) {
+            if (!$expected[$i]->equals($recorded[$i])) {
+                $this->fail($expected[$i] . ' does not equal ' . $recorded[$i]);
+            }
+        }
+
+        $this->assertTrue(true); // success
+    }
+
+    public function assertSubscriptions(array $expected, array $recorded): void
+    {
+        if (\count($expected) !== \count($recorded)) {
+            $this->fail(\sprintf('Expected subscription count %d does not match actual count %d.', \count($expected), \count($recorded)));
+        }
+
+        for ($i = 0, $count = \count($expected); $i < $count; $i++) {
+            if (!$expected[$i]->equals($recorded[$i])) {
+                $this->fail($expected[$i] . ' does not equal ' . $recorded[$i]);
+            }
+        }
+
+        $this->assertTrue(true); // success
+    }
+
+    protected function createTestScheduler()
+    {
+        return new TestScheduler();
+    }
+
+    protected function createHotObservable(array $events): HotObservable
+    {
+        return new HotObservable($this->scheduler, $events);
+    }
+
+    protected function createColdObservable(array $events)
+    {
+        return new ColdObservable($this->scheduler, $events);
     }
 }

@@ -10,17 +10,20 @@ use ApiClients\Tools\TestUtilities\TestCase;
 use function Clue\React\Block\await;
 use function EventLoop\getLoop;
 
+/**
+ * @internal
+ */
 final class SharedAppClientHandlerTest extends TestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $loop = getLoop();
-        $appId = uniqid('app-id-', true);
+        $appId = \uniqid('app-id-', true);
         $handler = new SharedAppClientHandler(new SharedAppClientService($loop));
 
         $app = await($handler->handle(new SharedAppClientCommand($appId)), $loop);
         self::assertInstanceOf(AsyncClient::class, $app);
         self::assertSame($app, await($handler->handle(new SharedAppClientCommand($appId)), $loop));
-        self::assertNotSame($app, await($handler->handle(new SharedAppClientCommand(md5($appId))), $loop));
+        self::assertNotSame($app, await($handler->handle(new SharedAppClientCommand(\md5($appId))), $loop));
     }
 }

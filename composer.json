@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": "^7.0",
+    "php": "^7.2",
     "api-clients/command-bus": "^2.0",
     "clue/block-react": "^1.1",
     "jean85/pretty-package-versions": "^1.0",
@@ -23,7 +23,7 @@
     "voryx/event-loop": "^3.0 || ^2.0.2"
   },
   "require-dev": {
-    "api-clients/test-utilities": "^4.1"
+    "api-clients/test-utilities": "^5.4"
   },
   "autoload": {
     "psr-4": {
@@ -42,7 +42,7 @@
   "config": {
     "sort-packages": true,
     "platform": {
-      "php": "7.0"
+      "php": "7.2"
     }
   },
   "extra": {

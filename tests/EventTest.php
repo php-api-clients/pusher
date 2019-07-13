@@ -4,6 +4,9 @@ namespace ApiClients\Tests\Client\Pusher;
 
 use ApiClients\Client\Pusher\Event;
 
+/**
+ * @internal
+ */
 final class EventTest extends TestCase
 {
     public function eventsProvider()
@@ -11,7 +14,7 @@ final class EventTest extends TestCase
         yield [
             [
                 'event' => 'event:name',
-                'data' => json_encode([]),
+                'data' => \json_encode([]),
             ],
             'event:name',
             '',
@@ -22,7 +25,7 @@ final class EventTest extends TestCase
             [
                 'event' => 'event:name',
                 'channel' => 'foo-bar',
-                'data' => json_encode([]),
+                'data' => \json_encode([]),
             ],
             'event:name',
             'foo-bar',
@@ -30,14 +33,14 @@ final class EventTest extends TestCase
         ];
 
         $data = [
-            'time' => time(),
-            'pid' => getmypid(),
+            'time' => \time(),
+            'pid' => \getmypid(),
         ];
         yield [
             [
                 'event' => 'event:name',
                 'channel' => 'foo-bar',
-                'data' => json_encode($data),
+                'data' => \json_encode($data),
             ],
             'event:name',
             'foo-bar',
@@ -45,8 +48,8 @@ final class EventTest extends TestCase
         ];
 
         $data = [
-            'time' => time(),
-            'pid' => getmypid(),
+            'time' => \time(),
+            'pid' => \getmypid(),
         ];
         yield [
             [
@@ -68,7 +71,7 @@ final class EventTest extends TestCase
      *
      * @dataProvider eventsProvider
      */
-    public function testEvent(array $input, string $event, string $channel, array $data)
+    public function testEvent(array $input, string $event, string $channel, array $data): void
     {
         $eventObject = Event::createFromMessage($input);
         self::assertSame($event, $eventObject->getEvent());
