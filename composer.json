@@ -14,7 +14,7 @@
     "api-clients/command-bus": "^2.0",
     "clue/block-react": "^1.1",
     "jean85/pretty-package-versions": "^1.0",
-    "react/dns": "^0.4.9",
+    "react/dns": "^1.0 || ^0.4.9",
     "react/http-client": "^0.5 || ^0.4.17",
     "reactivex/rxphp": "^2.0.4",
     "rx/helpers": "^1.0",
