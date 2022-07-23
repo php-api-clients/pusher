@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": "^8 || ^7.2",
     "api-clients/command-bus": "^2.0",
     "clue/block-react": "^1.1",
     "jean85/pretty-package-versions": "^1.0",
@@ -43,6 +43,10 @@
     "sort-packages": true,
     "platform": {
       "php": "7.2"
+    },
+    "allow-plugins": {
+      "ocramius/package-versions": true,
+      "localheinz/composer-normalize": true
     }
   },
   "extra": {
