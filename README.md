@@ -1,4 +1,4 @@
-# Pusher API Client for PHP 7
+# Pusher API Client for PHP 7 and 8
 
 [![Linux Build Status](https://travis-ci.org/php-api-clients/pusher.svg?branch=master)](https://travis-ci.org/php-api-clients/pusher)
 [![Latest Stable Version](https://poser.pugx.org/api-clients/pusher/v/stable.png)](https://packagist.org/packages/api-clients/pusher)
@@ -12,7 +12,7 @@
 To install via [Composer](http://getcomposer.org/), use the command below, it will automatically detect the latest version and bind it with `^`.
 
 ```bash
-composer require api-clients/pusher 
+composer require api-clients/pusher
 ```
 
 # Usage
