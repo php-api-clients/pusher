@@ -33,14 +33,23 @@ final class Event implements \JsonSerializable
 
     public static function createFromMessage(array $message): self
     {
+        $data = [];
+
+        if (isset($message['data'])) {
+            $data = $message['data'];
+            if (!\is_array($message['data'])) {
+                $data = \json_decode($message['data'], true);
+            }
+        }
+
         return new self(
             $message['event'],
-            \is_array($message['data']) ? $message['data'] : \json_decode($message['data'], true),
+            $data,
             $message['channel'] ?? ''
         );
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return \json_encode(['event' => $this->event, 'data' => $this->data, 'channel' => $this->channel]);
     }
@@ -84,9 +93,19 @@ final class Event implements \JsonSerializable
         return $event->getEvent() === 'pusher:connection_established';
     }
 
-    public static function subscribeOn(string $channel): array
+    public static function subscribeOn(string $channel, string $authKey = null, string $channelData = null): array
     {
-        return ['event' => 'pusher:subscribe', 'data' => ['channel' => $channel]];
+        $data = ['channel' => $channel];
+
+        if ($authKey) {
+            $data['auth'] = $authKey;
+        }
+
+        if ($channelData) {
+            $data['channel_data'] = $channelData;
+        }
+
+        return ['event' => 'pusher:subscribe', 'data' => $data];
     }
 
     public static function unsubscribeOn(string $channel): array
