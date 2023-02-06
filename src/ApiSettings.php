@@ -31,9 +31,9 @@ final class ApiSettings
      * Create WebSocket URL for given App ID.
      *
      * @param  string $appId
-     * @return string
+     * @return array
      */
-    public static function createUrl(string $appId, string $cluster = null): string
+    public static function createUrl(string $appId, string $cluster = null, string $host = null): string
     {
         $query = [
             'client' => 'api-clients/pusher (https://php-api-clients.org/clients/pusher)',
@@ -41,11 +41,13 @@ final class ApiSettings
             'version' => ApiSettings::getVersion(),
         ];
 
-        $host = ($cluster !== null) ? "ws-{$cluster}.pusher.com" : 'ws.pusherapp.com';
+        if (!$host) {
+            $host = ($cluster !== null) ? "ws-{$cluster}.pusher.com" : 'ws.pusherapp.com';
+        }
 
         return 'wss://'.$host.'/app/' .
-            $appId .
-            '?' . \http_build_query($query)
-        ;
+               $appId .
+               '?' . \http_build_query($query)
+            ;
     }
 }

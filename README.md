@@ -47,8 +47,8 @@ For more examples see the [examples directory](examples).
 This project aims to be 100% compatible with [Pusher's features](https://pusher.com/features) in `v1.3`.
 
 - [X] Subscribe to channels
-- [ ] Presence channels
-- [ ] Authentication
+- [x] Presence channels
+- [x] Authentication
 
 # License
 
